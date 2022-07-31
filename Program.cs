@@ -1,5 +1,6 @@
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
+using FinancesServer.Data;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using MudBlazor.Services;
 
 
@@ -11,6 +12,21 @@ builder.Services.AddServerSideBlazor();
 
 // Register Mudblazor service
 builder.Services.AddMudServices();
+
+// Build SQL connection using connection string and user-sercrets
+var sqlConBuilder = new SqlConnectionStringBuilder();
+sqlConBuilder.ConnectionString = "Server=localhost,1433;Initial Catalog=FinancesDB";
+sqlConBuilder.UserID = builder.Configuration["UserId"];
+sqlConBuilder.Password = builder.Configuration["UserPassword"];
+
+// Register custom DataAccess service with specified connection string
+builder.Services.AddDbContext<FinancesDbContext>(opt => opt.UseSqlServer(sqlConBuilder.ConnectionString));
+
+
+
+
+
+
 
 
 var app = builder.Build();
