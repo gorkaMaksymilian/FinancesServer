@@ -1,0 +1,98 @@
+@using Models.Earnings
+@using Models.Expenses
+@inject HttpClient Http
+@inject IReloadOtherComponentService ReloadOtherComponent
+@inject NavigationManager Navigator
+
+@if (Controller is not null) {
+    <MudGrid Justify="Justify.Center">
+        <MudItem>
+            <MudPaper Class="pa-4" Width="800px">
+                <MudForm @bind-IsValid="@validationSuccess" >
+                    <MudDatePicker Label="Date" @bind-Date="date" DisableToolbar="true"/>
+                    <MudTextField T="string" Label="Description" HelperText="Max. 50 characters" Validation="@(new Func<string, string?>(SubjectLength))" @bind-Text="subjectText"/>
+                    <MudSelect T="string" Label="Category" AnchorOrigin="Origin.BottomCenter" Required="true" RequiredError="Category is required!" @bind-Value="selectedCategory">
+                        @if (@Controller == "income"){
+                            @foreach (var category in Enum.GetNames(typeof(IncomeCategoryEnum)))
+                            {
+                                <MudSelectItem Value="@(category)" />
+                            }
+                        }
+                        else if(@Controller == "expense"){
+                            @foreach (var category in Enum.GetNames(typeof(ExpenseCategoryEnum)))
+                            {
+                                <MudSelectItem Value="@(category)" />
+                            }
+                        }
+                        
+                    </MudSelect>
+                    <MudNumericField @bind-Value="nullableDecimal" Format="N2" HideSpinButtons="true" Label="Amount" Required="true" RequiredError="Amount is required!"/>
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" Disabled="@(!validationSuccess)" Class="ml-auto" style="margin-top:6px" @onclick="HandleValidSubmit">Submit</MudButton>
+                </MudForm>   
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+}
+
+
+@code {
+    [Parameter] 
+    public string? Controller {get;set;}
+
+    DateTime? date = DateTime.Today; 
+    bool validationSuccess = false;
+    decimal? nullableDecimal;
+    string? subjectText;
+    string? selectedCategory;
+
+
+
+
+    private string? SubjectLength(string arg)
+    {
+        if (string.IsNullOrWhiteSpace(arg))
+            return "Subject is required!";
+
+        if (arg.Length > 50)
+            return "Subject must be less than 50 characters";
+
+        
+        return null;
+    }
+
+    public async Task HandleValidSubmit()
+    {
+        if (Controller == "income")
+        {
+            IncomeCategoryEnum myCategory;
+            Enum.TryParse<IncomeCategoryEnum>(selectedCategory, true, out myCategory);
+
+
+            Income newIncome = new Income() {
+                Date = date!.Value,
+                Description = subjectText,
+                Amount = nullableDecimal!.Value,
+                Category = myCategory
+            };
+            
+            await Http.PostAsJsonAsync<Income>($"{Navigator.BaseUri}api/{Controller}", newIncome);
+        }
+        else
+        {
+            ExpenseCategoryEnum myCategory;
+            Enum.TryParse<ExpenseCategoryEnum>(selectedCategory, true, out myCategory);
+
+
+            Expense newExpense = new Expense() {
+                Date = date!.Value,
+                Description = subjectText,
+                Amount = nullableDecimal!.Value,
+                Category = myCategory
+            };
+            
+            await Http.PostAsJsonAsync<Expense>($"{Navigator.BaseUri}api/{Controller}", newExpense);
+        }
+        
+        ReloadOtherComponent.CallRequestRefresh();
+    }
+}
