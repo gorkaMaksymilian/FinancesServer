@@ -1,6 +1,7 @@
 @page "/earnings"
 @inject NavigationManager Navigator
 @inject HttpClient Http
+@inject IReloadOtherComponentService ReloadOtherComponent
 @using FinancesServer.Components.Shared
 @using Models.Earnings
 
@@ -15,6 +16,13 @@
     private List<Income>? earnings = new List<Income>();
 
     protected async override Task OnInitializedAsync()
+    {
+        ReloadOtherComponent.RefreshRequested += RefreshMe;
+        earnings = await Http.GetFromJsonAsync<List<Income>>($"{Navigator.BaseUri}api/income");
+        StateHasChanged();
+    }
+
+    private async void RefreshMe()
     {
         earnings = await Http.GetFromJsonAsync<List<Income>>($"{Navigator.BaseUri}api/income");
         StateHasChanged();

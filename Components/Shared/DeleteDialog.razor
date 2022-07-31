@@ -1,5 +1,6 @@
 @inject HttpClient Http
 @inject NavigationManager Navigator
+@inject IReloadOtherComponentService ReloadOtherComponent
 
 
 <MudDialog>
@@ -36,6 +37,7 @@
     {
         if (MudDialog is not null && Id is not null && Controller is not null) {
             await Http.DeleteAsync($"{Navigator.BaseUri}api/{Controller}/{Id}");
+            ReloadOtherComponent.CallRequestRefresh();
             MudDialog.Close(DialogResult.Ok(true));
         }
             
