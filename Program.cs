@@ -27,7 +27,8 @@ builder.Services.AddScoped<IIncomeRepo, IncomeRepo>();
 // Register repository for Expense objects with dependency injection
 builder.Services.AddScoped<IExpenseRepo, ExpenseRepo>();
 
-
+// Register AutoMapper
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 
 
