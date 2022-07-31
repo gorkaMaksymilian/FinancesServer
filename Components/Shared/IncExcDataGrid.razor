@@ -1,0 +1,39 @@
+@typeparam T
+
+
+
+@if (Data is not null)
+{
+    <MudDataGrid Items="@Data" Hover="@true" Dense="@true" Striped="@true" ReadOnly="@false" EditMode="DataGridEditMode.Form" EditTrigger="DataGridEditTrigger.Manual"
+                 T="T" CommittedItemChanges="@CommittedItemChanges" style="margin-top: 40px;">
+        <Columns>
+            <Column T="T" Field="Id" Title="Id" IsEditable="false"/>
+            <Column T="T" Field="Date" Title="Date" ></Column>
+            <Column T="T" Field="Description" Title="Description"/>
+            <Column T="T" Field="Amount" Title="Amount"/>
+            <Column T="T" Field="Category" Title="Category"></Column>
+        </Columns>
+        <PagerContent>
+            <MudDataGridPager T="T" PageSizeOptions=@(new int[] {5, 10, 20}) />
+        </PagerContent>
+    </MudDataGrid>
+}
+
+
+
+
+@code {
+    
+    [Parameter]
+    public IEnumerable<T>? Data {get;set;}
+
+    [Parameter]
+    public RenderFragment<T>? ChildContent {get;set;}
+    
+    public void CommittedItemChanges(T item)
+    {
+
+    }
+
+
+}
