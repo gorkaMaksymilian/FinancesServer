@@ -65,5 +65,20 @@ namespace FinancesServer.Controllers
             
             return CreatedAtRoute(nameof(GetIncomeById), new { Id = incReadDto.Id}, incReadDto);
         }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult> UpdateIncome(int id, IncomeUpdateDto incomeUpdateDto)
+        {
+            var incomeModel = await _repo.GetIncomeById(id);
+            if(incomeModel == null)
+            {
+                return NotFound();
+            }
+            _mapper.Map(incomeUpdateDto, incomeModel);
+
+            await _repo.SaveChanges();
+
+            return NoContent();
+        }
     }
 }
