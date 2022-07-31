@@ -16,6 +16,7 @@ namespace FinancesServer.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Sets custom precision (in sql table) for Income.Amount and Expense.Amount properties
             modelBuilder.Entity<Income>().Property(p => p.Amount).HasPrecision(18,2);
             modelBuilder.Entity<Expense>().Property(p => p.Amount).HasPrecision(18,2);
 
