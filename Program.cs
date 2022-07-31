@@ -22,6 +22,8 @@ sqlConBuilder.Password = builder.Configuration["UserPassword"];
 // Register custom DataAccess service with specified connection string
 builder.Services.AddDbContext<FinancesDbContext>(opt => opt.UseSqlServer(sqlConBuilder.ConnectionString));
 
+// Register repository for Income objects with dependency injection
+builder.Services.AddScoped<IIncomeRepo, IncomeRepo>();
 
 
 
