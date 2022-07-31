@@ -31,7 +31,8 @@ builder.Services.AddScoped<IExpenseRepo, ExpenseRepo>();
 // Register AutoMapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-
+// Register HttpClient
+builder.Services.AddHttpClient();
 
 
 
