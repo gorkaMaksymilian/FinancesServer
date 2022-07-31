@@ -8,13 +8,12 @@
 
 <MudText Typo="Typo.h2" Align="Align.Center" GutterBottom="true">Update your earnings:</MudText>
 
-<IncExcDataGrid Data=@earnings>
-    @context.Id @context.Date @context.Description @context.Amount @context.Category
-</IncExcDataGrid>
+<IncExpDataGrid Data=@earnings/>
+
 
 @code {
     private List<Income>? earnings = new List<Income>();
-    
+
     protected async override Task OnInitializedAsync()
     {
         earnings = await Http.GetFromJsonAsync<List<Income>>($"{Navigator.BaseUri}api/income");
