@@ -1,5 +1,6 @@
 using FinancesServer.Controllers;
 using FinancesServer.Data;
+using FinancesServer.Services;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using MudBlazor.Services;
@@ -34,6 +35,8 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 // Register HttpClient
 builder.Services.AddHttpClient();
 
+// Register Service that will reload selected component from another component
+builder.Services.AddScoped<IReloadOtherComponentService, ReloadOtherComponentService>();
 
 
 var app = builder.Build();
