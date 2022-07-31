@@ -1,6 +1,7 @@
 using AutoMapper;
 using FinancesServer.Data;
 using FinancesServer.DTOs.Earnings;
+using FinancesServer.Models.Earnings;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FinancesServer.Controllers
@@ -29,15 +30,40 @@ namespace FinancesServer.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteIncome(int id)
         {
-            var incomeModleFromRepo = await _repo.GetIncomeById(id);
-            if(incomeModleFromRepo == null)
+            var incomeModel = await _repo.GetIncomeById(id);
+            if(incomeModel == null)
             {
                 return NotFound();
             }
-            _repo.DeleteIncome(incomeModleFromRepo);
+            _repo.DeleteIncome(incomeModel);
             await _repo.SaveChanges();
 
             return NoContent();
+        }
+
+        [HttpGet("{id}", Name = "GetIncomeById")]
+        public async Task<ActionResult<IncomeReadDto>> GetIncomeById(int id)
+        {
+            var incomeModel = await _repo.GetIncomeById(id);
+            if (incomeModel != null)
+            {
+                return Ok(_mapper.Map<IncomeReadDto>(incomeModel));
+            }
+            return NotFound();
+        }
+
+
+        [HttpPost]
+        public async Task<ActionResult<IncomeReadDto>> CreateIncome(IncomeCreateDto incCreateDto)
+        {
+            var incomeModel = _mapper.Map<Income>(incCreateDto);
+            await _repo.CreateIncome(incomeModel);
+            await _repo.SaveChanges();
+
+            var incReadDto = _mapper.Map<IncomeReadDto>(incomeModel);
+            
+            
+            return CreatedAtRoute(nameof(GetIncomeById), new { Id = incReadDto.Id}, incReadDto);
         }
     }
 }
