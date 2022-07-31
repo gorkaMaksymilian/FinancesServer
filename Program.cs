@@ -1,3 +1,4 @@
+using FinancesServer.Controllers;
 using FinancesServer.Data;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -33,7 +34,11 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 
 
+
 var app = builder.Build();
+
+// Mapping custom controllers
+app.MapControllers();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
