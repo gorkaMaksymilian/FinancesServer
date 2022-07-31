@@ -24,7 +24,8 @@ builder.Services.AddDbContext<FinancesDbContext>(opt => opt.UseSqlServer(sqlConB
 
 // Register repository for Income objects with dependency injection
 builder.Services.AddScoped<IIncomeRepo, IncomeRepo>();
-
+// Register repository for Expense objects with dependency injection
+builder.Services.AddScoped<IExpenseRepo, ExpenseRepo>();
 
 
 
