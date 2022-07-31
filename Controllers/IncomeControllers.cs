@@ -26,6 +26,18 @@ namespace FinancesServer.Controllers
             return Ok(_mapper.Map<IEnumerable<IncomeReadDto>>(allEarnings));
         }
 
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteIncome(int id)
+        {
+            var incomeModleFromRepo = await _repo.GetIncomeById(id);
+            if(incomeModleFromRepo == null)
+            {
+                return NotFound();
+            }
+            _repo.DeleteIncome(incomeModleFromRepo);
+            await _repo.SaveChanges();
 
+            return NoContent();
+        }
     }
 }
