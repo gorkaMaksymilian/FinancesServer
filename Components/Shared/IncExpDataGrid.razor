@@ -10,7 +10,11 @@
         <Columns>
             <Column T="T" Field="Id" Title="Id" IsEditable="false"/>
             <Column T="T" Field="Date" Title="Date" >
-                
+                <EditTemplate>
+                    @(dateItem = context.Item.GetType()!.GetProperty("Date")!.GetValue(context.Item)!)
+                    @(itemDate = (DateTime?)dateItem)
+                    <MudDatePicker Label="Date" DisableToolbar="true" @bind-Date="@(itemDate)"/>
+                </EditTemplate>
             </Column>
             <Column T="T" Field="Description" Title="Description"/>
             <Column T="T" Field="Amount" Title="Amount"/>
@@ -37,7 +41,9 @@
     
     [Parameter]
     public IEnumerable<T>? Data {get;set;}
-
+    
+    DateTime? itemDate;
+    object? dateItem;
     
     public void CommittedItemChanges(T item)
     {
@@ -64,6 +70,5 @@
         DialogService.Show<DeleteDialog>("Delete", parameters, options);
         
     }
-
 
 }
