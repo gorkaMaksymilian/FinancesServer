@@ -1,3 +1,5 @@
+@using Models.Earnings
+@using Models.Expenses
 @inject IDialogService DialogService
 @typeparam T
 
@@ -11,14 +13,41 @@
             <Column T="T" Field="Id" Title="Id" IsEditable="false"/>
             <Column T="T" Field="Date" Title="Date" >
                 <EditTemplate>
-                    @(dateItem = context.Item.GetType()!.GetProperty("Date")!.GetValue(context.Item)!)
-                    @(itemDate = (DateTime?)dateItem)
+                    @{
+                        dateItem = context.Item.GetType()!.GetProperty("Date")!.GetValue(context.Item);
+                        itemDate = (DateTime?)dateItem;
+                    }
+
                     <MudDatePicker Label="Date" DisableToolbar="true" @bind-Date="@(itemDate)"/>
                 </EditTemplate>
             </Column>
             <Column T="T" Field="Description" Title="Description"/>
             <Column T="T" Field="Amount" Title="Amount"/>
-            <Column T="T" Field="Category" Title="Category"></Column>
+            <Column T="T" Field="Category" Title="Category">
+                <EditTemplate>
+                    @{categoryItem = context.Item.GetType()!.GetProperty("Category")!.GetValue(context.Item);}
+                        @if(categoryItem!.GetType().ToString() == "FinancesServer.Models.Earnings.IncomeCategoryEnum") {
+                            incCategory = (IncomeCategoryEnum)categoryItem;
+                            <MudSelect @bind-Value="(incCategory)" Label="Category" Required RequiredError="You must select a category." Margin="@Margin.Dense">
+                                @foreach (IncomeCategoryEnum category in Enum.GetValues(typeof(IncomeCategoryEnum)))
+                                {
+                                    <MudSelectItem Value="category">@category</MudSelectItem>
+                                }
+                            </MudSelect>
+                        }
+                        else if (categoryItem!.GetType().ToString() == "FinancesServer.Models.Expenses.ExpenseCategoryEnum") {
+                            expCategory = (ExpenseCategoryEnum)categoryItem;
+                            <MudSelect @bind-Value="(expCategory)" Label="Category" Required RequiredError="You must select a category." Margin="@Margin.Dense">
+                                @foreach (ExpenseCategoryEnum category in Enum.GetValues(typeof(ExpenseCategoryEnum)))
+                                {
+                                    <MudSelectItem Value="category">@category</MudSelectItem>
+                                }
+                            </MudSelect>
+                        }
+                        
+                    
+                </EditTemplate>
+            </Column>
 
             <Column T="T" CellClass="d-flex justify-end" Sortable="@false">
                 <CellTemplate>
@@ -42,8 +71,16 @@
     [Parameter]
     public IEnumerable<T>? Data {get;set;}
     
-    DateTime? itemDate;
+    // To make Date EditTemplate work
     object? dateItem;
+    DateTime? itemDate;
+
+    // To make Category EditTemplate work
+    object? categoryItem;
+    IncomeCategoryEnum incCategory;
+    ExpenseCategoryEnum expCategory;
+
+
     
     public void CommittedItemChanges(T item)
     {
@@ -70,5 +107,6 @@
         DialogService.Show<DeleteDialog>("Delete", parameters, options);
         
     }
+
 
 }
