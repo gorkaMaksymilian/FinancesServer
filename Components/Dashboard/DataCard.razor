@@ -1,8 +1,13 @@
 <MudCard>
     <MudCardHeader>
         <CardHeaderContent>
-            <MudText Typo="Typo.subtitle1" Color="Color.Secondary">@Title.ToUpper()</MudText>
+            <MudText Typo="Typo.overline" Color="Color.Success" Style="font-size: 1.2rem">
+                @Title.ToUpper()
+            </MudText>
         </CardHeaderContent>
+        <CardHeaderActions>
+            <MudIcon Icon="@Icons.Filled.AttachMoney" Color="Color.Success" Size="Size.Large" Style="font-size: 3.25rem" />
+        </CardHeaderActions>
     </MudCardHeader>
 
     <MudCardContent>
