@@ -9,15 +9,17 @@
                  T="T" CommittedItemChanges="@CommittedItemChanges" style="margin-top: 40px;">
         <Columns>
             <Column T="T" Field="Id" Title="Id" IsEditable="false"/>
-            <Column T="T" Field="Date" Title="Date" ></Column>
+            <Column T="T" Field="Date" Title="Date" >
+                
+            </Column>
             <Column T="T" Field="Description" Title="Description"/>
             <Column T="T" Field="Amount" Title="Amount"/>
             <Column T="T" Field="Category" Title="Category"></Column>
 
             <Column T="T" CellClass="d-flex justify-end" Sortable="@false">
                 <CellTemplate>
-                    <MudIconButton Size="@Size.Small" Icon="@Icons.Filled.Delete" OnClick="@(() => DeleteRow(context.Item))"/>
-                    
+                    <MudIconButton Size="@Size.Small" Icon="@Icons.Outlined.Edit" OnClick="@context.Actions.StartEditingItem" />
+                    <MudIconButton Size="@Size.Small" Icon="@Icons.Filled.Delete" OnClick="@(() => DeleteRow(context.Item))"/>           
                 </CellTemplate>
             </Column>
 
@@ -46,9 +48,6 @@
     {
         object Id = item!.GetType()!.GetProperty("Id")!.GetValue(item)!; 
         string itemType = item.GetType().ToString();
-
-        Console.WriteLine(item!.GetType()!.ToString());
-        
 
         var parameters = new DialogParameters();
         parameters.Add("ContentText", "Do you really want to delete this record? This process cannot be undone.");
