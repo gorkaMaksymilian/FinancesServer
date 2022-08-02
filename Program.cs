@@ -38,6 +38,9 @@ builder.Services.AddHttpClient();
 // Register Service that will reload selected component from another component
 builder.Services.AddScoped<IReloadOtherComponentService, ReloadOtherComponentService>();
 
+// Register Service that gets formated data from DB
+builder.Services.AddScoped<IGetFormatedDataService,GetFormatedDataService>();
+
 
 var app = builder.Build();
 
