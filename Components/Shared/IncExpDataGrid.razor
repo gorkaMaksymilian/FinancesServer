@@ -57,7 +57,7 @@
         // At this point i can't think of other way to make it work :c
         if (itemType == "FinancesServer.Models.Earnings.Income")
             parameters.Add("Controller", "income");
-        else if (itemType == "FinancesServer.Models.Earnings.Expense")
+        else
             parameters.Add("Controller", "expense");
 
         var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraSmall };
