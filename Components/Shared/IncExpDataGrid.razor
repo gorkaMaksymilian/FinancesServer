@@ -1,6 +1,10 @@
 @using Models.Earnings
 @using Models.Expenses
+@using System.Reflection
 @inject IDialogService DialogService
+@inject HttpClient Http
+@inject NavigationManager Navigator
+@inject IReloadOtherComponentService ReloadOtherComponent
 @typeparam T
 
 
@@ -17,7 +21,7 @@
                         dateItem = context.Item.GetType()!.GetProperty("Date")!.GetValue(context.Item);
                         itemDate = (DateTime?)dateItem;
                     }
-                    <MudDatePicker Label="Date" DisableToolbar="true" Date="@itemDate"/>
+                    <MudDatePicker Label="Date" DisableToolbar="true" Date="@itemDate" DateChanged="@( (newDate) => SetItemDate(newDate, context.Item))"/>
                 </EditTemplate>
             </Column>
             <Column T="T" Field="Description" Title="Description"/>
@@ -26,14 +30,16 @@
                 <EditTemplate>
                     @{categoryItem = context.Item.GetType()!.GetProperty("Category")!.GetValue(context.Item);}
                         @if(categoryItem is IncomeCategoryEnum) {
-                            <MudSelect T="IncomeCategoryEnum" Value="(IncomeCategoryEnum)categoryItem" Label="Category" Required RequiredError="You must select a category." Margin="@Margin.Dense">
+                            <MudSelect T="IncomeCategoryEnum" Value="(IncomeCategoryEnum)categoryItem" Label="Category" Required RequiredError="You must select a category." 
+                                       Margin="@Margin.Dense" ValueChanged="@( (newCategory) => context.Item.GetType()!.GetProperty("Category")!.SetValue(context.Item,newCategory))">
                                 @foreach (IncomeCategoryEnum category in Enum.GetValues(typeof(IncomeCategoryEnum))) {
                                     <MudSelectItem Value="category">@category</MudSelectItem>
                                 }
                             </MudSelect>
                         }
                         else if (categoryItem is ExpenseCategoryEnum) {
-                            <MudSelect T="ExpenseCategoryEnum" Value="(ExpenseCategoryEnum)categoryItem" Label="Category" Required RequiredError="You must select a category." Margin="@Margin.Dense">
+                            <MudSelect T="ExpenseCategoryEnum" Value="(ExpenseCategoryEnum)categoryItem" Label="Category" Required RequiredError="You must select a category." 
+                                       Margin="@Margin.Dense" ValueChanged="@( (newCategory) => context.Item.GetType()!.GetProperty("Category")!.SetValue(context.Item,newCategory))">
                                 @foreach (ExpenseCategoryEnum category in Enum.GetValues(typeof(ExpenseCategoryEnum))) {
                                     <MudSelectItem Value="category">@category</MudSelectItem>
                                 }
@@ -64,19 +70,39 @@
     [Parameter]
     public IEnumerable<T>? Data {get;set;}
     
-    // To make Date EditTemplate work
+    // To make Date EditTemplate work [it does not support complex content like "(Type to case)variable" ]
     object? dateItem;
     DateTime? itemDate;
 
     // To make Category EditTemplate work
     object? categoryItem;
 
-
-
     
-    public void CommittedItemChanges(T item)
+    public async Task CommittedItemChanges(T item)
     {
-
+        IList<PropertyInfo> props = new List<PropertyInfo>(item.GetType().GetProperties());
+        Income inc = new Income();
+        Expense exp = new Expense();
+        
+        if (item is Expense) 
+        {
+            foreach (PropertyInfo prop in props)
+                prop.SetValue(exp,prop.GetValue(item));
+        
+            await Http.PutAsJsonAsync<Expense>($"{Navigator.BaseUri}api/expense/{exp.Id}", exp);
+            ReloadOtherComponent.CallRequestRefresh();
+        }
+        else if (item is Income)
+        {
+            foreach (PropertyInfo prop in props)
+                prop.SetValue(inc,prop.GetValue(item));
+        
+            await Http.PutAsJsonAsync<Income>($"{Navigator.BaseUri}api/income/{inc.Id}", inc);
+            ReloadOtherComponent.CallRequestRefresh();
+        }
+        
+        
+        
     }
 
     public void DeleteRow(T item)
@@ -99,5 +125,9 @@
         
     }
 
+    void SetItemDate(DateTime? changedDate, T item)
+    {
+        item.GetType()!.GetProperty("Date")!.SetValue(item, changedDate);
+    }
 
 }
