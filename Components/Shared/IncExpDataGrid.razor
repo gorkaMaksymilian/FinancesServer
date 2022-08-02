@@ -38,9 +38,7 @@
                                     <MudSelectItem Value="category">@category</MudSelectItem>
                                 }
                             </MudSelect>
-                        }
-                        
-                    
+                        }  
                 </EditTemplate>
             </Column>
 
@@ -90,10 +88,9 @@
         parameters.Add("ContentText", "Do you really want to delete this record? This process cannot be undone.");
         parameters.Add("Id", (int)Id);
 
-        // At this point i can't think of other way to make it work :c
-        if (itemType == "FinancesServer.Models.Earnings.Income")
+        if (item is Income)
             parameters.Add("Controller", "income");
-        else
+        else if (item is Expense)
             parameters.Add("Controller", "expense");
 
         var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraSmall };
