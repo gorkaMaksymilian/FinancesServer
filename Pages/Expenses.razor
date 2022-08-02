@@ -1,0 +1,32 @@
+@page "/expenses"
+@inject NavigationManager Navigator
+@inject HttpClient Http
+@inject IReloadOtherComponentService ReloadOtherComponent
+@using FinancesServer.Components.Shared
+@using Models.Expenses
+
+<PageTitle>Expenses</PageTitle>
+
+<MudText Typo="Typo.h2" Align="Align.Center" GutterBottom="true">Update your expenses:</MudText>
+
+<IncExpForm Controller="expense"/>
+
+<IncExpDataGrid Data=@expenses/>
+
+
+@code {
+    private List<Expense>? expenses = new List<Expense>();
+
+    protected async override Task OnInitializedAsync()
+    {
+        ReloadOtherComponent.RefreshRequested += RefreshMe;
+        expenses = await Http.GetFromJsonAsync<List<Expense>>($"{Navigator.BaseUri}api/expense");
+        StateHasChanged();
+    }
+
+    private async void RefreshMe()
+    {
+        expenses = await Http.GetFromJsonAsync<List<Expense>>($"{Navigator.BaseUri}api/expense");
+        StateHasChanged();
+    }
+}
