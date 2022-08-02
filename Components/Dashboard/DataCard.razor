@@ -1,3 +1,6 @@
+@using Models.Dashboard
+@inject IGetFormatedDataService dataService
+
 <MudCard>
     <MudCardHeader>
         <CardHeaderContent>
@@ -20,8 +23,26 @@
     </MudCardActions>
 </MudCard>
 
+@if (currentMonthIncome is not null) {
+    @foreach (var item in currentMonthIncome) {
+        <p>@item.Amount @item.Category</p>
+    }
+        
+
+}
+
+
 
 @code {
     [Parameter] 
     public string Title {get;set;} = "Set Title parameter to change this text.";
+
+    DateTime currentDate = DateTime.Today;
+    IEnumerable<MonthlyItem>? currentMonthIncome;
+
+    protected override async Task OnInitializedAsync()
+    {
+        currentMonthIncome = await dataService.GetMonthlyEarnings(currentDate.Month, currentDate.Year);
+        StateHasChanged();
+    }
 }
