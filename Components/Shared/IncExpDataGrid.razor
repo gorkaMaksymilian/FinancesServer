@@ -18,7 +18,7 @@
                         itemDate = (DateTime?)dateItem;
                     }
 
-                    <MudDatePicker Label="Date" DisableToolbar="true" @bind-Date="@(itemDate)"/>
+                    <MudDatePicker Label="Date" DisableToolbar="true" Date="@itemDate"/>
                 </EditTemplate>
             </Column>
             <Column T="T" Field="Description" Title="Description"/>
