@@ -1,0 +1,89 @@
+@using Models.Dashboard
+@inject IGetFormatedDataService dataService
+
+@if (currentMonthIncome is not null && currentMonthExpense is not null) 
+{
+    <MudCard>
+        <MudCardHeader style="padding-bottom: 0px;">
+            <CardHeaderContent>
+                <MudText Typo="Typo.overline" Color="@Color.Info" Style="font-size: 1.2rem">
+                    TOTAL PROFIT
+                </MudText>
+            </CardHeaderContent>
+            <CardHeaderActions>
+                <MudIcon Icon="@Icons.Outlined.Outbound" Color="@Color.Info" Size="Size.Large" Style="font-size: 3.25rem" />
+            </CardHeaderActions>
+        </MudCardHeader>
+
+        <MudCardContent style="padding-top: 0px;">
+            <MudText Typo="Typo.h2">$@currentMonthProfit</MudText>
+            @if (percentageChange == 0) {
+                <MudText Typo="Typo.body1">Profit same as last month</MudText>
+            }
+            else if (percentageChange < 0) {
+                <MudText Inline>
+                    <MudIcon Icon="@Icons.Filled.ArrowDownward" Color="@Color.Error" Style="font-size: 1.2rem"/>
+                    <MudText Color="@Color.Error" Inline Typo="Typo.body1">@percentageChange%</MudText>
+                    <MudText Inline Typo="Typo.body1">Since last month</MudText>
+                </MudText>
+            }
+            else {
+                <MudText Inline>
+                    <MudIcon Icon="@Icons.Filled.ArrowUpward" Color="@Color.Success" Style="font-size: 1.2rem"/> 
+                    <MudText Color="@Color.Success" Inline Typo="Typo.body1">@percentageChange%</MudText>
+                    <MudText Inline Typo="Typo.body1">Since last month</MudText>
+                </MudText>
+            }
+        </MudCardContent>
+    </MudCard>
+}
+
+
+
+@code {
+    DateTime currentDate = DateTime.Today;
+    IEnumerable<MonthlyItem>? currentMonthIncome;
+    IEnumerable<MonthlyItem>? currentMonthExpense;
+    IEnumerable<MonthlyItem>? lastMonthIncome;
+    IEnumerable<MonthlyItem>? lastMonthExpense;
+
+
+    decimal currentMonthProfit;
+    decimal lastMonthProfit;
+    decimal percentageChange;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        currentMonthIncome = await dataService.GetMonthlyEarnings(currentDate.Month, currentDate.Year);
+        currentMonthExpense = await dataService.GetMonthlyExpenses(currentDate.Month, currentDate.Year);
+        lastMonthIncome = await dataService.GetMonthlyEarnings(currentDate.AddMonths(-1).Month, currentDate.Year);
+        lastMonthExpense = await dataService.GetMonthlyExpenses(currentDate.AddMonths(-1).Month, currentDate.Year);
+
+        currentMonthProfit = GetSummedAmount(currentMonthIncome) - GetSummedAmount(currentMonthExpense);
+        lastMonthProfit = GetSummedAmount(lastMonthIncome) - GetSummedAmount(lastMonthExpense);
+        percentageChange = GetPercentageChange(currentMonthProfit, lastMonthProfit);
+
+        StateHasChanged();
+    }
+
+    protected decimal GetSummedAmount(IEnumerable<MonthlyItem> monthlyItems)
+    {
+        decimal sum = 0;
+        if (monthlyItems is not null)
+            foreach (var item in monthlyItems)
+                sum += item.Amount;
+
+        return sum;
+    }
+
+    protected decimal GetPercentageChange(decimal previous, decimal current)
+    {
+        if (previous == 0)
+            throw new InvalidOperationException();
+        
+        decimal change = (current - previous) / previous;
+        return Math.Round(change,2) * 100;
+    }
+
+}
