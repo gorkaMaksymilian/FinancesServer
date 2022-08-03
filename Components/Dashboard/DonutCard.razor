@@ -1,0 +1,24 @@
+@using Models.Dashboard
+
+<MudPaper Class="pa-4">
+    <MudChart ChartType="ChartType.Donut" Width="300px" Height="300px" @bind-SelectedIndex="Index" InputData="@CatalogArray" InputLabels="@Labels"></MudChart>
+</MudPaper>
+
+
+@code {
+    [Parameter, EditorRequired]
+    public double[]? CatalogArray {get;set;}
+
+    [Parameter, EditorRequired]
+    public string[]? Labels {get;set;}
+
+    [Parameter, EditorRequired]
+    public ControllerEnum Controller {get;set;}
+
+
+
+    private int Index = -1;
+
+
+
+}

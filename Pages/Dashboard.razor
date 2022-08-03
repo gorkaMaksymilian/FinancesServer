@@ -15,9 +15,9 @@
     <MudItem xs="4">
         <DataCard Controller="@ControllerEnum.Profit" SummedAmount="@summedCurrentMonthProfit" PercentageChange="@profitPercentageChange"/>
     </MudItem>
-    <MudItem xs="3">
+    <MudItem xs="4">
         <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-8">
-            <MudText Typo="Typo.h6" Align="Align.Center">3</MudText>
+            <MudText Typo="Typo.h6" Align="Align.Center">Earnings by category</MudText>
         </MudPaper>
     </MudItem>
     <MudItem xs="3">
@@ -35,17 +35,16 @@
 
 
 @code {
-    // Move getting data from database here cause is pointless to connect so many times
-    // Make components take this formated data and just put it in
-    // So basically one compoment that takes Controller and lastmonth currentmonth data and puts them in place
+    // Used in getting data from database
     IEnumerable<MonthlyItem>? currentMonthEarnings;
     IEnumerable<MonthlyItem>? currentMonthExpenses;
     IEnumerable<MonthlyItem>? lastMonthEarnings;
     IEnumerable<MonthlyItem>? lastMonthExpenses;
 
-    
     DateTime currentDate = DateTime.Today;
 
+
+    // Used to pass data to DataCard component
     decimal profitPercentageChange;
     decimal earningsPercentageChange;
     decimal expensesPercentageChange;
@@ -53,6 +52,11 @@
     decimal summedCurrentMonthEarnings;
     decimal summedCurrentMonthExpenses;
     decimal summedCurrentMonthProfit;
+
+
+    // Used to pass data to DonutCard component
+    
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -101,6 +105,8 @@
         decimal change = (current - previous) / previous;
         return Math.Round(change,2) * 100;
     }
+
+
 }
 
 
