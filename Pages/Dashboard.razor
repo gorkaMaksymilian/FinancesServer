@@ -1,16 +1,16 @@
 @page "/dashboard"
 @using FinancesServer.Components.Dashboard
+@using Models.Dashboard
 
 <PageTitle>Dashboard</PageTitle>
 
 <MudGrid Justify="Justify.SpaceBetween" Style="margin-top: 12px">
     <MudItem xs="4">
-        <DataCard Title="Earnings this month" HeaderColor="Color.Success" HeaderIcon="@Icons.Filled.AttachMoney"/>
+        <DataCard Title="Earnings this month" HeaderColor="Color.Success" HeaderIcon="@Icons.Filled.AttachMoney" Controller="@ControllerEnum.GetEarnings"/>
     </MudItem>
     <MudItem xs="4">
-        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-8">
-            <MudText Typo="Typo.h6" Align="Align.Center">4</MudText>
-        </MudPaper>
+        <DataCard Title="Expenses this month" HeaderColor="Color.Error" HeaderIcon="@Icons.Filled.MoneyOff" Controller="@ControllerEnum.GetEarnings"/>
+
     </MudItem>
     <MudItem xs="4">
         <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-8">

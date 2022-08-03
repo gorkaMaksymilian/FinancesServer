@@ -77,9 +77,15 @@
 
     protected override async Task OnInitializedAsync()
     {
-        currentMonthData = await dataService.GetMonthlyEarnings(currentDate.Month, currentDate.Year);
-        lastMonthData = await dataService.GetMonthlyEarnings(currentDate.AddMonths(-1).Month, currentDate.Year);
-        percentageChange = GetPercentageChange(GetSummedAmount(lastMonthData), GetSummedAmount(currentMonthData));
+        if (Controller == ControllerEnum.GetEarnings) {
+            currentMonthData = await dataService.GetMonthlyEarnings(currentDate.Month, currentDate.Year);
+            lastMonthData = await dataService.GetMonthlyEarnings(currentDate.AddMonths(-1).Month, currentDate.Year);
+            percentageChange = GetPercentageChange(GetSummedAmount(lastMonthData), GetSummedAmount(currentMonthData));
+        }
+        else if (Controller == ControllerEnum.GetExpenses) {
+            
+        }
+        
         StateHasChanged();
     }
 
