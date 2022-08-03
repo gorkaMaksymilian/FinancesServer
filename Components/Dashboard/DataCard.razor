@@ -83,7 +83,9 @@
             percentageChange = GetPercentageChange(GetSummedAmount(lastMonthData), GetSummedAmount(currentMonthData));
         }
         else if (Controller == ControllerEnum.GetExpenses) {
-            
+            currentMonthData = await dataService.GetMonthlyExpenses(currentDate.Month, currentDate.Year);
+            lastMonthData = await dataService.GetMonthlyExpenses(currentDate.AddMonths(-1).Month, currentDate.Year);
+            percentageChange = GetPercentageChange(GetSummedAmount(lastMonthData), GetSummedAmount(currentMonthData));
         }
         
         StateHasChanged();
