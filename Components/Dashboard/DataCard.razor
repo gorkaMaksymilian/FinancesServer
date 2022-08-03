@@ -1,131 +1,86 @@
 @using Models.Dashboard
 @inject IGetFormatedDataService dataService
 
-@if (currentMonthData is not null && lastMonthData is not null) 
-{
-    <MudCard>
-        <MudCardHeader style="padding-bottom: 0px;">
-            <CardHeaderContent>
-                <MudText Typo="Typo.overline" Color="@headerColor" Style="font-size: 1.2rem">
-                    @title!.ToUpper()
-                </MudText>
-            </CardHeaderContent>
-            <CardHeaderActions>
-                <MudIcon Icon="@headerIcon" Color="@headerColor" Size="Size.Large" Style="font-size: 3.25rem" />
-            </CardHeaderActions>
-        </MudCardHeader>
+<MudCard>
+    <MudCardHeader style="padding-bottom: 0px;">
+        <CardHeaderContent>
+            <MudText Typo="Typo.overline" Color="@headerColor" Style="font-size: 1.2rem">
+                @title!.ToUpper() THIS MONTH
+            </MudText>
+        </CardHeaderContent>
+        <CardHeaderActions>
+            <MudIcon Icon="@headerIcon" Color="@headerColor" Size="Size.Large" Style="font-size: 3.25rem" />
+        </CardHeaderActions>
+    </MudCardHeader>
 
-        <MudCardContent style="padding-top: 0px;">
-            @if (Controller == ControllerEnum.GetEarnings) {
-                <MudText Typo="Typo.h2">$@GetSummedAmount(currentMonthData)</MudText>
-            }
-            else if (Controller == ControllerEnum.GetExpenses) {
-                <MudText Typo="Typo.h2">-$@GetSummedAmount(currentMonthData)</MudText>
-            }
-            
-            @if (percentageChange == 0) {
-                <MudText Typo="Typo.body1">Income same as last months</MudText>
-            }
-            else if (percentageChange < 0) {
-                <MudText Inline>
-                    <MudIcon Icon="@Icons.Filled.ArrowDownward" Color="@percentageLessThanZeroColor" Style="font-size: 1.2rem"/>
-                    <MudText Color="@percentageLessThanZeroColor" Inline Typo="Typo.body1">@percentageChange%</MudText>
-                    <MudText Inline Typo="Typo.body1">Since last month</MudText>
-                </MudText>
-            }
-            else {
-                <MudText Inline>
-                    <MudIcon Icon="@Icons.Filled.ArrowUpward" Color="@percentageGreaterThanZeroColor" Style="font-size: 1.2rem"/> 
-                    <MudText Color="@percentageGreaterThanZeroColor" Inline Typo="Typo.body1">@percentageChange%</MudText>
-                    <MudText Inline Typo="Typo.body1">Since last month</MudText>
-                </MudText>
-            }
-        </MudCardContent>
-    </MudCard>
-}
+    <MudCardContent style="padding-top: 0px;">
+        <MudText Typo="Typo.h2">-@dolarSign@SummedAmount</MudText>
+        @if (PercentageChange == 0) {
+            <MudText Typo="Typo.body1">@title same as last month</MudText>
+        }
+        else if (PercentageChange < 0) {
+            <MudText Inline>
+                <MudIcon Icon="@Icons.Filled.ArrowDownward" Color="@percentageLessThanZeroColor" Style="font-size: 1.2rem"/>
+                <MudText Color="@percentageLessThanZeroColor" Inline Typo="Typo.body1">@PercentageChange%</MudText>
+                <MudText Inline Typo="Typo.body1">Since last month</MudText>
+            </MudText>
+        }
+        else {
+            <MudText Inline>
+                <MudIcon Icon="@Icons.Filled.ArrowUpward" Color="@percentageGreaterThanZeroColor" Style="font-size: 1.2rem"/> 
+                <MudText Color="@percentageGreaterThanZeroColor" Inline Typo="Typo.body1">@PercentageChange%</MudText>
+                <MudText Inline Typo="Typo.body1">Since last month</MudText>
+            </MudText>
+        }
+    </MudCardContent>
+</MudCard>
 
 
-@if (currentMonthData is not null) {
-    @foreach (var item in currentMonthData) {
-        <p>@item.Amount @item.Category</p>
-    }
-}
-<p>LAST</p>
-@if (lastMonthData is not null) {
-    @foreach (var item in lastMonthData) {
-        <p>@item.Amount @item.Category</p>
-    }
-}
 
 
 
 @code {
-    [Parameter]
+    [Parameter, EditorRequired]
     public ControllerEnum Controller {get;set;}
 
-    // Changes based on given Controller
-    public string? headerIcon;
-    public Color headerColor;
-    public string? title;
-    Color percentageLessThanZeroColor;
-    Color percentageGreaterThanZeroColor;
+    [Parameter, EditorRequired]
+    public decimal PercentageChange {get;set;}
 
-    // used for better readability
-    DateTime currentDate = DateTime.Today;
+    [Parameter, EditorRequired]
+    public decimal SummedAmount {get;set;}
 
-    // used or data binding
-    IEnumerable<MonthlyItem>? currentMonthData;
-    IEnumerable<MonthlyItem>? lastMonthData;
-    decimal percentageChange;
 
-    protected override async Task OnInitializedAsync()
+    // Styling and text changes based on given Controller
+    string? headerIcon;
+    Color headerColor;
+    string? title;
+    Color percentageLessThanZeroColor = Color.Error;
+    Color percentageGreaterThanZeroColor = Color.Success;
+    string dolarSign = "$";
+
+
+    protected override void OnInitialized()
     {
-        if (Controller == ControllerEnum.GetEarnings) {
-            // Setting data
-            currentMonthData = await dataService.GetMonthlyEarnings(currentDate.Month, currentDate.Year);
-            lastMonthData = await dataService.GetMonthlyEarnings(currentDate.AddMonths(-1).Month, currentDate.Year);
-            percentageChange = GetPercentageChange(GetSummedAmount(lastMonthData), GetSummedAmount(currentMonthData));
-
-            // Styling 
-            title = "Earnings this month"; 
+        if (Controller == ControllerEnum.Earnings) {
+            title = "Earnings"; 
             headerColor = Color.Success; 
             headerIcon = Icons.Filled.AttachMoney;
-            percentageLessThanZeroColor = Color.Error;
-            percentageGreaterThanZeroColor = Color.Success;
-        }
-        else if (Controller == ControllerEnum.GetExpenses) {
-            // Setting data
-            currentMonthData = await dataService.GetMonthlyExpenses(currentDate.Month, currentDate.Year);
-            lastMonthData = await dataService.GetMonthlyExpenses(currentDate.AddMonths(-1).Month, currentDate.Year);
-            percentageChange = GetPercentageChange(GetSummedAmount(lastMonthData), GetSummedAmount(currentMonthData));
 
-            // Styling 
-            title = "Expenses this month";  
+        }
+        else if (Controller == ControllerEnum.Expenses) {
+            title = "Expenses";  
             headerColor = Color.Error;  
             headerIcon = Icons.Filled.MoneyOff;
             percentageLessThanZeroColor = Color.Success;
             percentageGreaterThanZeroColor = Color.Error;
+            dolarSign = "-$";
+        }
+        else if (Controller == ControllerEnum.Profit) {
+            title = "Profit";  
+            headerColor = Color.Info;  
+            headerIcon = Icons.Outlined.Outbound;
         }
         
         StateHasChanged();
-    }
-
-    protected decimal GetSummedAmount(IEnumerable<MonthlyItem> monthlyItems)
-    {
-        decimal sum = 0;
-        if (monthlyItems is not null)
-            foreach (var item in monthlyItems)
-                sum += item.Amount;
-
-        return sum;
-    }
-
-    protected decimal GetPercentageChange(decimal previous, decimal current)
-    {
-        if (previous == 0)
-            throw new InvalidOperationException();
-        
-        decimal change = (current - previous) / previous;
-        return Math.Round(change,2) * 100;
     }
 }

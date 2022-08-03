@@ -7,31 +7,30 @@
 
 <MudGrid Justify="Justify.SpaceBetween" Style="margin-top: 12px">
     <MudItem xs="4">
-        <DataCard Controller="@ControllerEnum.GetEarnings"/>
+        
     </MudItem>
     <MudItem xs="4">
         @* <DataCard Controller="@ControllerEnum.GetExpenses"/> *@
-
     </MudItem>
     <MudItem xs="4">
-        <ProfitCard CurrentMonthProfit="@currentMonthProfit" LastMonthProfit="@lastMonthProfit" PercentageChange="@percentageChange"/>
-    </MudItem>
-    <MudItem xs="3">
-        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-8">
-            <MudText Typo="Typo.h6" Align="Align.Center">3</MudText>
-        </MudPaper>
-    </MudItem>
-    <MudItem xs="3">
-        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-8">
-            <MudText Typo="Typo.h6" Align="Align.Center">3</MudText>
-        </MudPaper>
-    </MudItem>
-    <MudItem xs="3">
-        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-8">
-            <MudText Typo="Typo.h6" Align="Align.Center">3</MudText>
-        </MudPaper>
-    </MudItem>
+        <DataCard Controller="@ControllerEnum.Profit" SummedAmount="@summedCurrentMonthProfit" PercentageChange="@profitPercentageChange"/>
 
+    </MudItem>
+    <MudItem xs="3">
+        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-8">
+            <MudText Typo="Typo.h6" Align="Align.Center">3</MudText>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="3">
+        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-8">
+            <MudText Typo="Typo.h6" Align="Align.Center">3</MudText>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="3">
+        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-8">
+            <MudText Typo="Typo.h6" Align="Align.Center">3</MudText>
+        </MudPaper>
+    </MudItem>
 </MudGrid>
 
 
@@ -39,29 +38,48 @@
 @code {
     // Move getting data from database here cause is pointless to connect so many times
     // Make components take this formated data and just put it in
-    // So basicly one compoment that takes Controller and lastmonth currentmonth data and puts them in place
-    IEnumerable<MonthlyItem>? currentMonthIncome;
-    IEnumerable<MonthlyItem>? currentMonthExpense;
-    IEnumerable<MonthlyItem>? lastMonthIncome;
-    IEnumerable<MonthlyItem>? lastMonthExpense;
+    // So basically one compoment that takes Controller and lastmonth currentmonth data and puts them in place
+    IEnumerable<MonthlyItem>? currentMonthEarnings;
+    IEnumerable<MonthlyItem>? currentMonthExpenses;
+    IEnumerable<MonthlyItem>? lastMonthEarnings;
+    IEnumerable<MonthlyItem>? lastMonthExpenses;
 
     
     DateTime currentDate = DateTime.Today;
-    decimal currentMonthProfit;
-    decimal lastMonthProfit;
-    decimal percentageChange;
+
+    decimal profitPercentageChange;
+    decimal earningsPercentageChange;
+    decimal expensesPercentageChange;
+
+    decimal summedCurrentMonthEarnings;
+    decimal summedCurrentMonthExpenses;
+    decimal summedCurrentMonthProfit;
 
     protected override async Task OnInitializedAsync()
     {
-        currentMonthIncome = await dataService.GetMonthlyEarnings(currentDate.Month, currentDate.Year);
-        currentMonthExpense = await dataService.GetMonthlyExpenses(currentDate.Month, currentDate.Year);
-        lastMonthIncome = await dataService.GetMonthlyEarnings(currentDate.AddMonths(-1).Month, currentDate.Year);
-        lastMonthExpense = await dataService.GetMonthlyExpenses(currentDate.AddMonths(-1).Month, currentDate.Year);
+        // Get all data needed
+        currentMonthEarnings = await dataService.GetMonthlyEarnings(currentDate.Month, currentDate.Year);
+        currentMonthExpenses = await dataService.GetMonthlyExpenses(currentDate.Month, currentDate.Year);
+        lastMonthEarnings = await dataService.GetMonthlyEarnings(currentDate.AddMonths(-1).Month, currentDate.Year);
+        lastMonthExpenses = await dataService.GetMonthlyExpenses(currentDate.AddMonths(-1).Month, currentDate.Year);
 
-        currentMonthProfit = GetSummedAmount(currentMonthIncome!) - GetSummedAmount(currentMonthExpense!);
-        lastMonthProfit = GetSummedAmount(lastMonthIncome!) - GetSummedAmount(lastMonthExpense!);
-        percentageChange = GetPercentageChange(lastMonthProfit, currentMonthProfit);
-        StateHasChanged();
+        if (currentMonthEarnings is not null && currentMonthExpenses is not null && lastMonthEarnings is not null && lastMonthExpenses is not null)
+        {
+            // Earnings
+            summedCurrentMonthEarnings = GetSummedAmount(currentMonthEarnings);
+            decimal summedLastMonthEarnings = GetSummedAmount(lastMonthEarnings);
+            earningsPercentageChange = GetPercentageChange(summedLastMonthEarnings,summedCurrentMonthEarnings);
+
+            // Expenses
+            summedCurrentMonthExpenses = GetSummedAmount(currentMonthExpenses);
+            decimal summedLastMonthExpenses = GetSummedAmount(lastMonthExpenses);
+            expensesPercentageChange = GetPercentageChange(summedLastMonthExpenses, summedCurrentMonthExpenses);
+
+            // Profit
+            summedCurrentMonthProfit = summedCurrentMonthEarnings - summedCurrentMonthExpenses;
+            decimal lastMonthProfit = summedLastMonthEarnings - summedLastMonthExpenses;
+            profitPercentageChange = GetPercentageChange(lastMonthProfit, summedCurrentMonthProfit);
+        }
     }
 
     protected decimal GetSummedAmount(IEnumerable<MonthlyItem> monthlyItems)

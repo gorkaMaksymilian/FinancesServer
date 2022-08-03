@@ -2,7 +2,8 @@ namespace FinancesServer.Models.Dashboard
 {
     public enum ControllerEnum 
     {
-        GetEarnings,
-        GetExpenses
+        Earnings,
+        Expenses,
+        Profit
     }
 }

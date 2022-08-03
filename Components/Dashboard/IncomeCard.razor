@@ -1,19 +1,19 @@
 <MudCard>
     <MudCardHeader style="padding-bottom: 0px;">
         <CardHeaderContent>
-            <MudText Typo="Typo.overline" Color="@Color.Info" Style="font-size: 1.2rem">
-                PROFIT THIS MONTH
+            <MudText Typo="Typo.overline" Color="@Color.Success" Style="font-size: 1.2rem">
+                INCOME THIS MONTH
             </MudText>
         </CardHeaderContent>
         <CardHeaderActions>
-            <MudIcon Icon="@Icons.Outlined.Outbound" Color="@Color.Info" Size="Size.Large" Style="font-size: 3.25rem" />
+            <MudIcon Icon="@Icons.Filled.AttachMoney" Color="@Color.Success" Size="Size.Large" Style="font-size: 3.25rem" />
         </CardHeaderActions>
     </MudCardHeader>
 
     <MudCardContent style="padding-top: 0px; padding-bottom: 32px">
-        <MudText Typo="Typo.h2">$@CurrentMonthProfit</MudText>
+        <MudText Typo="Typo.h2">$@CurrentMonthIncome</MudText>
         @if (PercentageChange == 0) {
-            <MudText Typo="Typo.body1">Profit same as last month</MudText>
+            <MudText Typo="Typo.body1">Income same as last month</MudText>
         }
         else if (PercentageChange < 0) {
             <MudText Inline>
@@ -32,17 +32,10 @@
     </MudCardContent>
 </MudCard>
 
-
-
-
-@code { 
+@code {
     [Parameter, EditorRequired]
-    public decimal CurrentMonthProfit {get;set;}
+    public decimal CurrentMonthIncome {get;set;}
 
     [Parameter, EditorRequired]
     public decimal PercentageChange {get;set;}
-
 }
-
-
-
