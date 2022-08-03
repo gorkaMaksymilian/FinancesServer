@@ -6,12 +6,12 @@
     <MudCard>
         <MudCardHeader style="padding-bottom: 0px;">
             <CardHeaderContent>
-                <MudText Typo="Typo.overline" Color="@HeaderColor" Style="font-size: 1.2rem">
-                    @Title.ToUpper()
+                <MudText Typo="Typo.overline" Color="@headerColor" Style="font-size: 1.2rem">
+                    @title.ToUpper()
                 </MudText>
             </CardHeaderContent>
             <CardHeaderActions>
-                <MudIcon Icon="@HeaderIcon" Color="@HeaderColor" Size="Size.Large" Style="font-size: 3.25rem" />
+                <MudIcon Icon="@headerIcon" Color="@headerColor" Size="Size.Large" Style="font-size: 3.25rem" />
             </CardHeaderActions>
         </MudCardHeader>
 
@@ -61,42 +61,48 @@
 
 @code {
     [Parameter]
-    public string HeaderIcon {get;set;} = Icons.Filled.Bolt;
-
-    [Parameter]
-    public Color HeaderColor {get;set;} = Color.Default;
-
-    [Parameter] 
-    public string Title {get;set;} = "Set Title parameter to change this text.";
-
-    [Parameter]
     public ControllerEnum Controller {get;set;}
 
-
-    decimal percentageChange;
+    // Changes based on given Controller
+    public string? headerIcon;
+    public Color headerColor;
+    public string? title;
     Color percentageLessThanZeroColor;
     Color percentageGreaterThanZeroColor;
 
-
+    // used for better readability
     DateTime currentDate = DateTime.Today;
+
+    // used or data binding
     IEnumerable<MonthlyItem>? currentMonthData;
     IEnumerable<MonthlyItem>? lastMonthData;
+    decimal percentageChange;
 
     protected override async Task OnInitializedAsync()
     {
         if (Controller == ControllerEnum.GetEarnings) {
+            // Setting data
             currentMonthData = await dataService.GetMonthlyEarnings(currentDate.Month, currentDate.Year);
             lastMonthData = await dataService.GetMonthlyEarnings(currentDate.AddMonths(-1).Month, currentDate.Year);
             percentageChange = GetPercentageChange(GetSummedAmount(lastMonthData), GetSummedAmount(currentMonthData));
 
+            // Styling 
+            title = "Earnings this month"; 
+            headerColor = Color.Success; 
+            headerIcon = Icons.Filled.AttachMoney;
             percentageLessThanZeroColor = Color.Error;
             percentageGreaterThanZeroColor = Color.Success;
         }
         else if (Controller == ControllerEnum.GetExpenses) {
+            // Setting data
             currentMonthData = await dataService.GetMonthlyExpenses(currentDate.Month, currentDate.Year);
             lastMonthData = await dataService.GetMonthlyExpenses(currentDate.AddMonths(-1).Month, currentDate.Year);
             percentageChange = GetPercentageChange(GetSummedAmount(lastMonthData), GetSummedAmount(currentMonthData));
 
+            // Styling 
+            title = "Expenses this month";  
+            headerColor = Color.Error;  
+            headerIcon = Icons.Filled.MoneyOff;
             percentageLessThanZeroColor = Color.Success;
             percentageGreaterThanZeroColor = Color.Error;
         }
