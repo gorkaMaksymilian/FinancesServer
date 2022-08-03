@@ -10,27 +10,22 @@
     </MudCardHeader>
 
     <MudCardContent style="padding-top: 0px; padding-bottom: 32px;">
-        <MudChart ChartType="ChartType.Donut" Width="300px" Height="300px" @bind-SelectedIndex="Index" InputData="@AmountArray" InputLabels="@Labels"></MudChart>
+        <MudChart ChartType="ChartType.Donut" Width="300px" Height="300px" InputData="@AmountArray" InputLabels="@Labels" 
+                  SelectedIndexChanged="@( (newIndex) => ChangeIndexAndInfo(newIndex))"/>
+        <MudText Typo="Typo.body1">@selectedCategoryInfo</MudText>
     </MudCardContent>
 </MudCard>
 
 
 
 @code {
-    [Parameter, EditorRequired]
-    public double[]? AmountArray {get;set;}
-
-    [Parameter, EditorRequired]
+    []
     public string[]? Labels {get;set;}
-
-    [Parameter, EditorRequired]
-    public ControllerEnum Controller {get;set;}
-
-
 
     private int Index = -1;
     string? title;
     Color headerColor;
+    string? selectedCategoryInfo = "Select category by clicking on chart segment";
 
 
     protected override void OnInitialized()
@@ -42,4 +37,22 @@
 
         StateHasChanged();
     }
+
+    protected void ChangeIndexAndInfo(int newIndex) 
+    {
+        Index = newIndex;
+        selectedCategoryInfo = $"{}";
+    }
+
+    [Parameter, EditorRequired]
+    public double[]? AmountArray {get;set;}
+
+    [Parameter, EditorRequired]
+    public string[]? Labels {get;set;}
+
+    [Parameter, EditorRequired]
+    public ControllerEnum Controller {get;set;}
+
+
+
 }
