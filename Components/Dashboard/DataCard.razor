@@ -16,24 +16,29 @@
         </MudCardHeader>
 
         <MudCardContent style="padding-top: 0px;">
-            <MudText Typo="Typo.h2">$@GetSummedAmount(currentMonthData)</MudText>
+            @if (Controller == ControllerEnum.GetEarnings) {
+                <MudText Typo="Typo.h2">$@GetSummedAmount(currentMonthData)</MudText>
+            }
+            else if (Controller == ControllerEnum.GetExpenses) {
+                <MudText Typo="Typo.h2">-$@GetSummedAmount(currentMonthData)</MudText>
+            }
+            
             @if (percentageChange == 0) {
                 <MudText Typo="Typo.body1">Income same as last months</MudText>
             }
             else if (percentageChange < 0) {
                 <MudText Inline>
-                    <MudIcon Icon="@Icons.Filled.ArrowDownward" Color="Color.Error" Style="font-size: 1.2rem"/>
-                    <MudText Color="Color.Error" Inline Typo="Typo.body1">@percentageChange%</MudText>
+                    <MudIcon Icon="@Icons.Filled.ArrowDownward" Color="@percentageLessThanZeroColor" Style="font-size: 1.2rem"/>
+                    <MudText Color="@percentageLessThanZeroColor" Inline Typo="Typo.body1">@percentageChange%</MudText>
                     <MudText Inline Typo="Typo.body1">Since last month</MudText>
                 </MudText>
             }
             else {
                 <MudText Inline>
-                    <MudIcon Icon="@Icons.Filled.ArrowUpward" Color="Color.Success" Style="font-size: 1.2rem"/> 
-                    <MudText Color="Color.Success" Inline Typo="Typo.body1">@percentageChange%</MudText>
+                    <MudIcon Icon="@Icons.Filled.ArrowUpward" Color="@percentageGreaterThanZeroColor" Style="font-size: 1.2rem"/> 
+                    <MudText Color="@percentageGreaterThanZeroColor" Inline Typo="Typo.body1">@percentageChange%</MudText>
                     <MudText Inline Typo="Typo.body1">Since last month</MudText>
                 </MudText>
-                
             }
         </MudCardContent>
     </MudCard>
@@ -69,6 +74,8 @@
 
 
     decimal percentageChange;
+    Color percentageLessThanZeroColor;
+    Color percentageGreaterThanZeroColor;
 
 
     DateTime currentDate = DateTime.Today;
@@ -81,11 +88,17 @@
             currentMonthData = await dataService.GetMonthlyEarnings(currentDate.Month, currentDate.Year);
             lastMonthData = await dataService.GetMonthlyEarnings(currentDate.AddMonths(-1).Month, currentDate.Year);
             percentageChange = GetPercentageChange(GetSummedAmount(lastMonthData), GetSummedAmount(currentMonthData));
+
+            percentageLessThanZeroColor = Color.Error;
+            percentageGreaterThanZeroColor = Color.Success;
         }
         else if (Controller == ControllerEnum.GetExpenses) {
             currentMonthData = await dataService.GetMonthlyExpenses(currentDate.Month, currentDate.Year);
             lastMonthData = await dataService.GetMonthlyExpenses(currentDate.AddMonths(-1).Month, currentDate.Year);
             percentageChange = GetPercentageChange(GetSummedAmount(lastMonthData), GetSummedAmount(currentMonthData));
+
+            percentageLessThanZeroColor = Color.Success;
+            percentageGreaterThanZeroColor = Color.Error;
         }
         
         StateHasChanged();
@@ -109,4 +122,4 @@
         decimal change = (current - previous) / previous;
         return Math.Round(change,2) * 100;
     }
-}
+}((byte)
