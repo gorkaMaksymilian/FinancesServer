@@ -26,10 +26,15 @@
             </MudText>
         }
         else {
-            <MudText Inline>
-                <MudIcon Icon="@Icons.Filled.ArrowUpward" Color="@percentageGreaterThanZeroColor" Style="font-size: 1.2rem"/> 
-                <MudText Color="@percentageGreaterThanZeroColor" Inline Typo="Typo.body1">@PercentageChange%</MudText>
-                <MudText Inline Typo="Typo.body1">Since last month</MudText>
+            <MudText Inline> 
+                @if (PercentageChange == decimal.MaxValue) {
+                    <MudText Inline Typo="Typo.body1">Last month data not found</MudText>
+                }
+                else {
+                    <MudIcon Icon="@Icons.Filled.ArrowUpward" Color="@percentageGreaterThanZeroColor" Style="font-size: 1.2rem"/> 
+                    <MudText Color="@percentageGreaterThanZeroColor" Inline Typo="Typo.body1">@PercentageChange%</MudText>
+                    <MudText Inline Typo="Typo.body1">Since last month</MudText>
+                }
             </MudText>
         }
     </MudCardContent>
