@@ -1,6 +1,7 @@
 @page "/dashboard"
 @using FinancesServer.Components.Dashboard
 @using Models.Dashboard
+@inject IGetFormatedDataService dataService
 
 <PageTitle>Dashboard</PageTitle>
 
@@ -9,11 +10,11 @@
         <DataCard Controller="@ControllerEnum.GetEarnings"/>
     </MudItem>
     <MudItem xs="4">
-        <DataCard Controller="@ControllerEnum.GetExpenses"/>
+        @* <DataCard Controller="@ControllerEnum.GetExpenses"/> *@
 
     </MudItem>
     <MudItem xs="4">
-        <ProfitCard/>
+        <ProfitCard CurrentMonthProfit="@currentMonthProfit" LastMonthProfit="@lastMonthProfit" PercentageChange="@percentageChange"/>
     </MudItem>
     <MudItem xs="3">
         <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-8">
@@ -33,8 +34,55 @@
 
 </MudGrid>
 
+
+
 @code {
     // Move getting data from database here cause is pointless to connect so many times
     // Make components take this formated data and just put it in
     // So basicly one compoment that takes Controller and lastmonth currentmonth data and puts them in place
+    IEnumerable<MonthlyItem>? currentMonthIncome;
+    IEnumerable<MonthlyItem>? currentMonthExpense;
+    IEnumerable<MonthlyItem>? lastMonthIncome;
+    IEnumerable<MonthlyItem>? lastMonthExpense;
+
+    
+    DateTime currentDate = DateTime.Today;
+    decimal currentMonthProfit;
+    decimal lastMonthProfit;
+    decimal percentageChange;
+
+    protected override async Task OnInitializedAsync()
+    {
+        currentMonthIncome = await dataService.GetMonthlyEarnings(currentDate.Month, currentDate.Year);
+        currentMonthExpense = await dataService.GetMonthlyExpenses(currentDate.Month, currentDate.Year);
+        lastMonthIncome = await dataService.GetMonthlyEarnings(currentDate.AddMonths(-1).Month, currentDate.Year);
+        lastMonthExpense = await dataService.GetMonthlyExpenses(currentDate.AddMonths(-1).Month, currentDate.Year);
+
+        currentMonthProfit = GetSummedAmount(currentMonthIncome!) - GetSummedAmount(currentMonthExpense!);
+        lastMonthProfit = GetSummedAmount(lastMonthIncome!) - GetSummedAmount(lastMonthExpense!);
+        percentageChange = GetPercentageChange(lastMonthProfit, currentMonthProfit);
+        StateHasChanged();
+    }
+
+    protected decimal GetSummedAmount(IEnumerable<MonthlyItem> monthlyItems)
+    {
+        decimal sum = 0;
+        if (monthlyItems is not null)
+            foreach (var item in monthlyItems)
+                sum += item.Amount;
+
+        return sum;
+    }
+
+    protected decimal GetPercentageChange(decimal previous, decimal current)
+    {
+        if (previous == 0)
+            throw new InvalidOperationException();
+        
+        decimal change = (current - previous) / previous;
+        return Math.Round(change,2) * 100;
+    }
 }
+
+
+
