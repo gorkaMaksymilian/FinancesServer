@@ -11,39 +11,16 @@
 
     <MudCardContent style="padding-top: 0px; padding-bottom: 32px;">
         <MudChart ChartType="ChartType.Donut" Width="300px" Height="300px" InputData="@AmountArray" InputLabels="@Labels" 
-                  SelectedIndexChanged="@( (newIndex) => ChangeIndexAndInfo(newIndex))"/>
-        <MudText Typo="Typo.body1">@selectedCategoryInfo</MudText>
+                  SelectedIndex="@chartIndex" SelectedIndexChanged="@( (newIndex) => ChangeIndexAndInfo(newIndex))"/>
+        <MudText Align="Align.Center" Typo="Typo.subtitle2" Style="font-size: 1.7rem;">@selectedCategoryInfo</MudText>
     </MudCardContent>
 </MudCard>
 
 
 
+
+
 @code {
-    []
-    public string[]? Labels {get;set;}
-
-    private int Index = -1;
-    string? title;
-    Color headerColor;
-    string? selectedCategoryInfo = "Select category by clicking on chart segment";
-
-
-    protected override void OnInitialized()
-    {
-        if (Controller == ControllerEnum.Earnings) {
-            title = "Earnings"; 
-            headerColor = Color.Success;
-        }
-
-        StateHasChanged();
-    }
-
-    protected void ChangeIndexAndInfo(int newIndex) 
-    {
-        Index = newIndex;
-        selectedCategoryInfo = $"{}";
-    }
-
     [Parameter, EditorRequired]
     public double[]? AmountArray {get;set;}
 
@@ -53,6 +30,37 @@
     [Parameter, EditorRequired]
     public ControllerEnum Controller {get;set;}
 
+    int chartIndex = -1;
+    string? title;
+    Color headerColor;
+    string? selectedCategoryInfo = "Select category";
 
 
+    protected override void OnInitialized()
+    {
+     
+        if (Controller == ControllerEnum.Earnings) {
+            title = "Earnings"; 
+            headerColor = Color.Success;
+            
+        }
+
+
+        
+        
+
+
+        StateHasChanged();
+    }
+
+    protected void ChangeIndexAndInfo(int newIndex) 
+    {
+        chartIndex = newIndex;
+
+        if (Labels is not null && AmountArray is not null) 
+        {
+            selectedCategoryInfo = $"{Labels[newIndex]}: ${AmountArray[newIndex]}";
+        }
+        StateHasChanged();
+    }
 }
