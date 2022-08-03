@@ -1,48 +1,101 @@
 @using Models.Dashboard
 @inject IGetFormatedDataService dataService
 
-<MudCard>
-    <MudCardHeader>
-        <CardHeaderContent>
-            <MudText Typo="Typo.overline" Color="Color.Success" Style="font-size: 1.2rem">
-                @Title.ToUpper()
-            </MudText>
-        </CardHeaderContent>
-        <CardHeaderActions>
-            <MudIcon Icon="@Icons.Filled.AttachMoney" Color="Color.Success" Size="Size.Large" Style="font-size: 3.25rem" />
-        </CardHeaderActions>
-    </MudCardHeader>
+@if (currentMonthData is not null && lastMonthData is not null) 
+{
+    <MudCard>
+        <MudCardHeader style="padding-bottom: 0px;">
+            <CardHeaderContent>
+                <MudText Typo="Typo.overline" Color="@HeaderColor" Style="font-size: 1.2rem">
+                    @Title.ToUpper()
+                </MudText>
+            </CardHeaderContent>
+            <CardHeaderActions>
+                <MudIcon Icon="@HeaderIcon" Color="@HeaderColor" Size="Size.Large" Style="font-size: 3.25rem" />
+            </CardHeaderActions>
+        </MudCardHeader>
 
-    <MudCardContent>
-        <MudText>Story of the day</MudText>
-        <MudText Typo="Typo.body2">The quick, brown fox jumps over a lazy dog.</MudText>
-    </MudCardContent>
+        <MudCardContent style="padding-top: 0px;">
+            <MudText Typo="Typo.h2">$@GetSummedAmount(currentMonthData)</MudText>
+            @if (percentageChange == 0) {
+                <MudText Typo="Typo.body1">Income same as last months</MudText>
+            }
+            else if (percentageChange < 0) {
+                <MudText Inline>
+                    <MudIcon Icon="@Icons.Filled.ArrowDownward" Color="Color.Error" Style="font-size: 1.2rem"/>
+                    <MudText Color="Color.Error" Inline Typo="Typo.body1">@percentageChange%</MudText>
+                    <MudText Inline Typo="Typo.body1">Since last month</MudText>
+                </MudText>
+            }
+            else {
+                <MudText Inline>
+                    <MudIcon Icon="@Icons.Filled.ArrowUpward" Color="Color.Success" Style="font-size: 1.2rem"/> 
+                    <MudText Color="Color.Success" Inline Typo="Typo.body1">@percentageChange%</MudText>
+                    <MudText Inline Typo="Typo.body1">Since last month</MudText>
+                </MudText>
+                
+            }
+        </MudCardContent>
+    </MudCard>
+}
 
-    <MudCardActions>
-        <MudButton Variant="Variant.Text" Color="Color.Primary">Learn More</MudButton>
-    </MudCardActions>
-</MudCard>
 
-@if (currentMonthIncome is not null) {
-    @foreach (var item in currentMonthIncome) {
+@if (currentMonthData is not null) {
+    @foreach (var item in currentMonthData) {
         <p>@item.Amount @item.Category</p>
     }
-        
-
+}
+<p>LAST</p>
+@if (lastMonthData is not null) {
+    @foreach (var item in lastMonthData) {
+        <p>@item.Amount @item.Category</p>
+    }
 }
 
 
 
 @code {
+    [Parameter]
+    public string HeaderIcon {get;set;} = Icons.Filled.Bolt;
+
+    [Parameter]
+    public Color HeaderColor {get;set;} = Color.Default;
+
     [Parameter] 
     public string Title {get;set;} = "Set Title parameter to change this text.";
 
+
+    decimal percentageChange;
+
+
     DateTime currentDate = DateTime.Today;
-    IEnumerable<MonthlyItem>? currentMonthIncome;
+    IEnumerable<MonthlyItem>? currentMonthData;
+    IEnumerable<MonthlyItem>? lastMonthData;
 
     protected override async Task OnInitializedAsync()
     {
-        currentMonthIncome = await dataService.GetMonthlyEarnings(currentDate.Month, currentDate.Year);
+        currentMonthData = await dataService.GetMonthlyEarnings(currentDate.Month, currentDate.Year);
+        lastMonthData = await dataService.GetMonthlyEarnings(currentDate.AddMonths(-1).Month, currentDate.Year);
+        percentageChange = GetPercentageChange(GetSummedAmount(lastMonthData), GetSummedAmount(currentMonthData));
         StateHasChanged();
+    }
+
+    protected decimal GetSummedAmount(IEnumerable<MonthlyItem> monthlyItems)
+    {
+        decimal sum = 0;
+        if (monthlyItems is not null)
+            foreach (var item in monthlyItems)
+                sum += item.Amount;
+
+        return sum;
+    }
+
+    protected decimal GetPercentageChange(decimal previous, decimal current)
+    {
+        if (previous == 0)
+            throw new InvalidOperationException();
+        
+        decimal change = (current - previous) / previous;
+        return Math.Round(change,2) * 100;
     }
 }
