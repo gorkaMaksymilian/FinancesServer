@@ -16,9 +16,7 @@
         <DataCard Controller="@ControllerEnum.Profit" SummedAmount="@summedCurrentMonthProfit" PercentageChange="@profitPercentageChange"/>
     </MudItem>
     <MudItem xs="4">
-        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-8">
-            <MudText Typo="Typo.h6" Align="Align.Center">Earnings by category</MudText>
-        </MudPaper>
+        <DonutCard Controller="@ControllerEnum.Earnings" AmountArray="@currentMonthEarningsAmounts" Labels="@currentMonthEarningsCategories"/>
     </MudItem>
     <MudItem xs="3">
         <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-8">
@@ -55,7 +53,8 @@
 
 
     // Used to pass data to DonutCard component
-    
+    string[]? currentMonthEarningsCategories;
+    double[]? currentMonthEarningsAmounts;
 
 
     protected override async Task OnInitializedAsync()
@@ -68,20 +67,26 @@
 
         if (currentMonthEarnings is not null && currentMonthExpenses is not null && lastMonthEarnings is not null && lastMonthExpenses is not null)
         {
-            // Earnings
+            // Earnings (for DataCard)
             summedCurrentMonthEarnings = GetSummedAmount(currentMonthEarnings);
             decimal summedLastMonthEarnings = GetSummedAmount(lastMonthEarnings);
             earningsPercentageChange = GetPercentageChange(summedLastMonthEarnings,summedCurrentMonthEarnings);
 
-            // Expenses
+            // Expenses (for DataCard)
             summedCurrentMonthExpenses = GetSummedAmount(currentMonthExpenses);
             decimal summedLastMonthExpenses = GetSummedAmount(lastMonthExpenses);
             expensesPercentageChange = GetPercentageChange(summedLastMonthExpenses, summedCurrentMonthExpenses);
 
-            // Profit
+            // Profit (for DataCard)
             summedCurrentMonthProfit = summedCurrentMonthEarnings - summedCurrentMonthExpenses;
             decimal lastMonthProfit = summedLastMonthEarnings - summedLastMonthExpenses;
             profitPercentageChange = GetPercentageChange(lastMonthProfit, summedCurrentMonthProfit);
+
+
+
+            // Earnings (for DountCard)
+            FillCategoryArray(currentMonthEarnings, ref currentMonthEarningsCategories);
+            FillAmountArray(currentMonthEarnings, ref currentMonthEarningsAmounts);
         }
     }
 
@@ -106,6 +111,27 @@
         return Math.Round(change,2) * 100;
     }
 
+    protected void FillCategoryArray(IEnumerable<MonthlyItem>? monthlyItems, ref string[]? categoryArray)
+    {
+        List<string> categories = new List<string>();
+
+        if (monthlyItems is not null) 
+            foreach (var item in monthlyItems) 
+                categories.Add(item.Category!);
+            
+        categoryArray = categories.ToArray();
+    }
+
+    protected void FillAmountArray(IEnumerable<MonthlyItem>? monthlyItems, ref double[]? amountArray)
+    {
+        List<double> amounts = new List<double>();
+
+        if (monthlyItems is not null) 
+            foreach (var item in monthlyItems) 
+                amounts.Add((double)item.Amount);
+            
+        amountArray = amounts.ToArray();
+    }
 
 }
 

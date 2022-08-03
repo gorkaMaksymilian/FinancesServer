@@ -1,13 +1,24 @@
 @using Models.Dashboard
 
-<MudPaper Class="pa-4">
-    <MudChart ChartType="ChartType.Donut" Width="300px" Height="300px" @bind-SelectedIndex="Index" InputData="@CatalogArray" InputLabels="@Labels"></MudChart>
-</MudPaper>
+<MudCard>
+    <MudCardHeader style="padding-bottom: 0px;">
+        <CardHeaderContent>
+            <MudText Typo="Typo.overline" Color="@headerColor" Style="font-size: 1.2rem">
+                @title!.ToUpper() BY CATEGORY
+            </MudText>
+        </CardHeaderContent>
+    </MudCardHeader>
+
+    <MudCardContent style="padding-top: 0px; padding-bottom: 32px;">
+        <MudChart ChartType="ChartType.Donut" Width="300px" Height="300px" @bind-SelectedIndex="Index" InputData="@AmountArray" InputLabels="@Labels"></MudChart>
+    </MudCardContent>
+</MudCard>
+
 
 
 @code {
     [Parameter, EditorRequired]
-    public double[]? CatalogArray {get;set;}
+    public double[]? AmountArray {get;set;}
 
     [Parameter, EditorRequired]
     public string[]? Labels {get;set;}
@@ -18,7 +29,17 @@
 
 
     private int Index = -1;
+    string? title;
+    Color headerColor;
 
 
+    protected override void OnInitialized()
+    {
+        if (Controller == ControllerEnum.Earnings) {
+            title = "Earnings"; 
+            headerColor = Color.Success;
+        }
 
+        StateHasChanged();
+    }
 }
