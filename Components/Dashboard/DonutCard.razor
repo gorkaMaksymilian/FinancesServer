@@ -1,6 +1,6 @@
 @using Models.Dashboard
 
-<MudCard>
+<MudCard Style="height: 500px;">
     <MudCardHeader style="padding-bottom: 0px;">
         <CardHeaderContent>
             <MudText Typo="Typo.overline" Color="@headerColor" Style="font-size: 1.1rem">
@@ -12,6 +12,7 @@
     <MudCardContent style="padding-top: 0px; padding-bottom: 32px;">
         <MudChart ChartType="ChartType.Donut" Width="300px" Height="300px" InputData="@AmountArray" InputLabels="@Labels" 
                   SelectedIndex="@chartIndex" SelectedIndexChanged="@( (newIndex) => ChangeIndexAndInfo(newIndex))"/>
+
         <MudText Align="Align.Center" Typo="Typo.subtitle2" Style="font-size: 1.7rem;">@selectedCategoryInfo</MudText>
     </MudCardContent>
 </MudCard>
@@ -33,7 +34,7 @@
     int chartIndex = -1;
     string? title;
     Color headerColor;
-    string? selectedCategoryInfo = "Select category";
+    string selectedCategoryInfo = "Select category";
 
 
     protected override void OnInitialized()
@@ -44,7 +45,10 @@
             headerColor = Color.Success;
             
         }
-        // TODO Implement this component for Spendings (and Profit??)
+        else if (Controller == ControllerEnum.Expenses) {
+            title = "Expenses"; 
+            headerColor = Color.Error;
+        }
 
         
         
