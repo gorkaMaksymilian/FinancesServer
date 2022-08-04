@@ -1,6 +1,6 @@
 @using Models.Dashboard
 
-<MudCard Style="height: 500px;">
+<MudCard Style="min-height: 500px; min-width: 400px;">
     <MudCardHeader style="padding-bottom: 0px;">
         <CardHeaderContent>
             <MudText Typo="Typo.overline" Color="@headerColor" Style="font-size: 1.1rem">
@@ -13,7 +13,16 @@
         <MudChart ChartType="ChartType.Donut" Width="300px" Height="300px" InputData="@AmountArray" InputLabels="@Labels" 
                   SelectedIndex="@chartIndex" SelectedIndexChanged="@( (newIndex) => ChangeIndexAndInfo(newIndex))"/>
 
-        <MudText Align="Align.Center" Typo="Typo.subtitle2" Style="font-size: 1.7rem;">@selectedCategoryInfo</MudText>
+        @if (AmountArray == null || AmountArray.Length == 0) 
+        {
+            <MudText Align="Align.Center" Typo="Typo.subtitle2" Style="font-size: 1.7rem;">@title not found</MudText>
+        }
+        else 
+        {
+            <MudText Align="Align.Center" Typo="Typo.subtitle2" Style="font-size: 1.7rem;">@selectedCategoryInfo</MudText>
+        }
+                
+        
     </MudCardContent>
 </MudCard>
 
@@ -39,20 +48,16 @@
 
     protected override void OnInitialized()
     {
-     
+
         if (Controller == ControllerEnum.Earnings) {
             title = "Earnings"; 
             headerColor = Color.Success;
-            
+
         }
         else if (Controller == ControllerEnum.Expenses) {
             title = "Expenses"; 
             headerColor = Color.Error;
         }
-
-        
-        
-
 
         StateHasChanged();
     }
