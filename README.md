@@ -39,7 +39,7 @@ Ready:
 To-do list:
 * Make sure Expenses/Earnings validation works.
 * Dashboard compoments exception support (empty database etc.)
-
+* Support for weekly payments (like bi-weekly salary payments)
 
 
 ## Status
