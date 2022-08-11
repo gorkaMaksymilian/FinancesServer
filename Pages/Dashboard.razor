@@ -15,13 +15,30 @@
     <MudItem xs="4">
         <DataCard Controller="@ControllerEnum.Profit" SummedAmount="@summedCurrentMonthProfit" PercentageChange="@profitPercentageChange"/>
     </MudItem>
-    <MudItem xs="4">
+
+    <MudItem xs="6">
         <DonutCard Controller="@ControllerEnum.Earnings" AmountArray="@currentMonthEarningsAmounts" Labels="@currentMonthEarningsCategories"/>
     </MudItem>
-    <MudItem xs="4">
+    <MudItem xs="6">
         <DonutCard Controller="@ControllerEnum.Expenses" AmountArray="@currentMonthExpensesAmounts" Labels="@currentMonthExpensesCategories"/>
     </MudItem>
-    <MudItem xs="4">
+
+    <MudItem xs="3">
+        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-8">
+            <MudText Typo="Typo.h6" Align="Align.Center">3</MudText>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="3">
+        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-8">
+            <MudText Typo="Typo.h6" Align="Align.Center">3</MudText>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="3">
+        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-8">
+            <MudText Typo="Typo.h6" Align="Align.Center">3</MudText>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="3">
         <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-8">
             <MudText Typo="Typo.h6" Align="Align.Center">3</MudText>
         </MudPaper>

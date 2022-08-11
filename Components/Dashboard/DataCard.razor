@@ -1,6 +1,6 @@
 @using Models.Dashboard
 
-<MudCard Style="min-width: 400px; min-height: 200px;">
+<MudCard >
     <MudCardHeader style="padding-bottom: 0px;">
         <CardHeaderContent>
             <MudText Typo="Typo.overline" Color="@headerColor" Style="font-size: 1.2rem">
@@ -27,7 +27,7 @@
         else {
             <MudText Inline> 
                 @if (PercentageChange == decimal.MaxValue) {
-                    <MudText Inline Typo="Typo.body1">Last month data not found</MudText>
+                    <MudText Inline Typo="Typo.body1">Data for last month not found</MudText>
                 }
                 else {
                     <MudIcon Icon="@Icons.Filled.ArrowUpward" Color="@percentageGreaterThanZeroColor" Style="font-size: 1.2rem"/> 
