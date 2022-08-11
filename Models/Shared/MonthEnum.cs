@@ -1,6 +1,6 @@
 namespace FinancesServer.Models.Shared
 {
-    public enum Month
+    public enum MonthEnum
     {
         January = 1,
         February = 2,

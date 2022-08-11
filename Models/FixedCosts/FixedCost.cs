@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using FinancesServer.Models.Shared;
 
 namespace FinancesServer.Models.FixedCosts
 {
@@ -17,5 +18,7 @@ namespace FinancesServer.Models.FixedCosts
         [Required]
         public FixedCostCategoryEnum Category { get; set; }
 
+        [Required]
+        public MonthEnum MonthOfFirstPayment {get;set;} 
     }
 }
