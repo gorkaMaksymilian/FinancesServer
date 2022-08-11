@@ -7,7 +7,7 @@ namespace FinancesServer.Models.FixedCosts
         Mortgage,
         UtilityBill,
         Lease,
-        LoanRepayment
+        LoanRepayment,
 
     }
 }
