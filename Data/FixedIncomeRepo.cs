@@ -4,6 +4,13 @@ namespace FinancesServer.Data
 {
     public class FixedIncomeRepo : IFixedIncomeRepo
     {
+        private readonly FinancesDbContext _context;
+
+        public FixedIncomeRepo(FinancesDbContext context)
+        {
+            _context = context;
+        }
+
         public Task CreateFixedIncome(FixedIncome fInc)
         {
             throw new NotImplementedException();
