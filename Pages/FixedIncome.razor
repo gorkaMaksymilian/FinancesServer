@@ -1,0 +1,25 @@
+@page "/fixedincome"
+@using FinancesServer.Components.Shared
+@inject IReloadOtherComponentService ReloadOtherComponent
+
+<PageTitle>Fixed income</PageTitle>
+
+<MudText Typo="Typo.h2" Align="Align.Center" GutterBottom="true">Update your fixed income:</MudText>
+
+<FixedIncCostForm Controller="fixedincome"></FixedIncCostForm>
+
+
+@code {
+    @* protected async override Task OnInitializedAsync()
+    {
+        ReloadOtherComponent.RefreshRequested += RefreshMe;
+      
+        StateHasChanged();
+    }
+
+    private async void RefreshMe()
+    {
+       
+        StateHasChanged();
+    } *@
+}
