@@ -1,6 +1,6 @@
 using FinancesServer.Models.FixedCosts;
 
-namespace FinancesServer.Data
+namespace FinancesServer.Data.FixedCosts
 {
     public interface IFixedCostRepo
     {

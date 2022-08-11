@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using FinancesServer.Models.FixedIncome;
 using FinancesServer.Models.Shared;
 
-namespace FinancesServer.DTOs.FixedIncome
+namespace FinancesServer.DTOs.FixedIncomes
 {
     public class FixedIncomeCreateDto
     {

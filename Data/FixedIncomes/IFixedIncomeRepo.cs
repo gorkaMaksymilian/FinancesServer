@@ -1,6 +1,6 @@
 using FinancesServer.Models.FixedIncome;
 
-namespace FinancesServer.Data
+namespace FinancesServer.Data.FixedIncomes
 {
     public interface IFixedIncomeRepo
     {

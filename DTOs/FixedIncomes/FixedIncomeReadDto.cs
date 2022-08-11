@@ -1,7 +1,7 @@
 using FinancesServer.Models.FixedIncome;
 using FinancesServer.Models.Shared;
 
-namespace FinancesServer.DTOs.FixedIncome
+namespace FinancesServer.DTOs.FixedIncomes
 {
     public class FixedIncomeReadDto
     {

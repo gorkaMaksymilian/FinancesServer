@@ -1,32 +1,32 @@
-using FinancesServer.Models.FixedCosts;
+using FinancesServer.Models.FixedIncome;
 
-namespace FinancesServer.Data
+namespace FinancesServer.Data.FixedIncomes
 {
-    public class FixedCostRepo : IFixedCostRepo
+    public class FixedIncomeRepo : IFixedIncomeRepo
     {
         private readonly FinancesDbContext _context;
 
-        public FixedCostRepo(FinancesDbContext context)
+        public FixedIncomeRepo(FinancesDbContext context)
         {
             _context = context;
         }
 
-        public Task CreateFixedCost(FixedCost exp)
+        public Task CreateFixedIncome(FixedIncome fInc)
         {
             throw new NotImplementedException();
         }
 
-        public void DeleteFixedCost(FixedCost exp)
+        public void DeleteFixedIncome(FixedIncome fInc)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<FixedCost>> GetAllCosts()
+        public Task<IEnumerable<FixedIncome>> GetAllFixedIncomes()
         {
             throw new NotImplementedException();
         }
 
-        public Task<FixedCost?> GetFixedCostById(int id)
+        public Task<FixedIncome?> GetFixedIncomeById(int id)
         {
             throw new NotImplementedException();
         }
