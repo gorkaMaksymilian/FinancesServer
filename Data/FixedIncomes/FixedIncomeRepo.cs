@@ -1,4 +1,5 @@
 using FinancesServer.Models.FixedIncome;
+using Microsoft.EntityFrameworkCore;
 
 namespace FinancesServer.Data.FixedIncomes
 {
@@ -11,29 +12,35 @@ namespace FinancesServer.Data.FixedIncomes
             _context = context;
         }
 
-        public Task CreateFixedIncome(FixedIncome fInc)
+        public async Task CreateFixedIncome(FixedIncome fInc)
         {
-            throw new NotImplementedException();
+            if (fInc is null)
+                throw new ArgumentNullException(nameof(fInc));
+
+            await _context.AddAsync(fInc);
         }
 
         public void DeleteFixedIncome(FixedIncome fInc)
         {
-            throw new NotImplementedException();
+            if (fInc is null)
+                throw new ArgumentNullException(nameof(fInc));
+
+            _context.FixedIncomes.Remove(fInc);
         }
 
-        public Task<IEnumerable<FixedIncome>> GetAllFixedIncomes()
+        public async Task<IEnumerable<FixedIncome>> GetAllFixedIncomes()
         {
-            throw new NotImplementedException();
+            return await _context.FixedIncomes.ToListAsync();
         }
 
-        public Task<FixedIncome?> GetFixedIncomeById(int id)
+        public async Task<FixedIncome?> GetFixedIncomeById(int id)
         {
-            throw new NotImplementedException();
+            return await _context.FixedIncomes.FirstOrDefaultAsync(fInc => fInc.Id == id);
         }
 
-        public Task SaveChanges()
+        public async Task SaveChanges()
         {
-            throw new NotImplementedException();
+            await _context.SaveChangesAsync();
         }
     }
 }
