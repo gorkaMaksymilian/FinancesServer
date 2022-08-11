@@ -1,0 +1,4 @@
+namespace FinancesServer.DTOs.FixedCosts
+{
+    
+}
