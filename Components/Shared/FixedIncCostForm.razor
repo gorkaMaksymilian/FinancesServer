@@ -45,15 +45,14 @@
 
 
 @code {
-    [Parameter] 
+    [Parameter, EditorRequired] 
     public string? Controller {get;set;}
 
     bool validationSuccess = false;
     decimal? nullableDecimal;
     string? description;
     string? selectedCategory;
-    string? currentMonth;
-
+    string? currentMonth = ((MonthEnum)DateTime.Now.Month).ToString();
 
 
 
