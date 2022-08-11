@@ -1,5 +1,6 @@
 @page "/fixedincome"
 @using FinancesServer.Components.Shared
+@using Models.FixedIncomes
 @inject NavigationManager Navigator
 @inject HttpClient Http
 @inject IReloadOtherComponentService ReloadOtherComponent
@@ -9,6 +10,14 @@
 <MudText Typo="Typo.h2" Align="Align.Center" GutterBottom="true">Update your fixed income:</MudText>
 
 <FixedForm Controller="fixedincome"/>
+
+@* <FixedDataGrid Data="@fixedIncomes"/> *@
+@if (fixedIncomes is not null) {
+    @foreach (FixedIncome item in fixedIncomes)
+    {
+        <p>@item.Id @item.Description</p>
+    }
+}
 
 
 @code {

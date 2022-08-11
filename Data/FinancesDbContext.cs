@@ -1,7 +1,7 @@
 using FinancesServer.Models.Earnings;
 using FinancesServer.Models.Expenses;
 using FinancesServer.Models.FixedCosts;
-using FinancesServer.Models.FixedIncome;
+using FinancesServer.Models.FixedIncomes;
 using Microsoft.EntityFrameworkCore;
 
 namespace FinancesServer.Data

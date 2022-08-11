@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-using FinancesServer.Models.FixedIncome;
+using FinancesServer.Models.FixedIncomes;
 using FinancesServer.Models.Shared;
 
 namespace FinancesServer.DTOs.FixedIncomes

@@ -1,6 +1,6 @@
 using AutoMapper;
 using FinancesServer.DTOs.FixedIncomes;
-using FinancesServer.Models.FixedIncome;
+using FinancesServer.Models.FixedIncomes;
 
 namespace FinancesServer.Profiles
 {

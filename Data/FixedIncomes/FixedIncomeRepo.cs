@@ -1,4 +1,4 @@
-using FinancesServer.Models.FixedIncome;
+using FinancesServer.Models.FixedIncomes;
 using Microsoft.EntityFrameworkCore;
 
 namespace FinancesServer.Data.FixedIncomes

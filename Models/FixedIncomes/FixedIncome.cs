@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using FinancesServer.Models.Shared;
 
-namespace FinancesServer.Models.FixedIncome
+namespace FinancesServer.Models.FixedIncomes
 {
     public class FixedIncome
     {

@@ -1,4 +1,4 @@
-using FinancesServer.Models.FixedIncome;
+using FinancesServer.Models.FixedIncomes;
 
 namespace FinancesServer.Data.FixedIncomes
 {

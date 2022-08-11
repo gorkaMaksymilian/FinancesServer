@@ -1,7 +1,7 @@
 using AutoMapper;
 using FinancesServer.Data.FixedIncomes;
 using FinancesServer.DTOs.FixedIncomes;
-using FinancesServer.Models.FixedIncome;
+using FinancesServer.Models.FixedIncomes;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FinancesServer.Controllers

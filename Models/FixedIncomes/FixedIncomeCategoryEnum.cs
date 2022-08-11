@@ -1,4 +1,4 @@
-namespace FinancesServer.Models.FixedIncome
+namespace FinancesServer.Models.FixedIncomes
 {
     public enum FixedIncomeCategoryEnum
     {
