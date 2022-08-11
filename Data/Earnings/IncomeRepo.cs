@@ -1,7 +1,7 @@
 using FinancesServer.Models.Earnings;
 using Microsoft.EntityFrameworkCore;
 
-namespace FinancesServer.Data
+namespace FinancesServer.Data.Earnings
 {
     public class IncomeRepo : IIncomeRepo
     {
