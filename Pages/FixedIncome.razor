@@ -1,5 +1,7 @@
 @page "/fixedincome"
 @using FinancesServer.Components.Shared
+@inject NavigationManager Navigator
+@inject HttpClient Http
 @inject IReloadOtherComponentService ReloadOtherComponent
 
 <PageTitle>Fixed income</PageTitle>
@@ -10,16 +12,18 @@
 
 
 @code {
-    @* protected async override Task OnInitializedAsync()
+    private List<FixedIncome>? fixedIncomes = new List<FixedIncome>();
+
+    protected async override Task OnInitializedAsync()
     {
         ReloadOtherComponent.RefreshRequested += RefreshMe;
-      
+        fixedIncomes = await Http.GetFromJsonAsync<List<FixedIncome>>($"{Navigator.BaseUri}api/fixedincome");
         StateHasChanged();
     }
 
     private async void RefreshMe()
     {
-       
+        fixedIncomes = await Http.GetFromJsonAsync<List<FixedIncome>>($"{Navigator.BaseUri}api/fixedincome");
         StateHasChanged();
-    } *@
+    }
 }
