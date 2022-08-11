@@ -7,9 +7,9 @@ namespace FinancesServer.Data.FixedCosts
         Task SaveChanges();
         Task<FixedCost?> GetFixedCostById(int id);
         Task<IEnumerable<FixedCost>> GetAllCosts();
-        Task CreateFixedCost(FixedCost exp);
+        Task CreateFixedCost(FixedCost fExp);
 
 
-        void DeleteFixedCost(FixedCost exp);
+        void DeleteFixedCost(FixedCost fExp);
     }
 }

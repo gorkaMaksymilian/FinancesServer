@@ -1,4 +1,5 @@
 using FinancesServer.Models.FixedCosts;
+using Microsoft.EntityFrameworkCore;
 
 namespace FinancesServer.Data.FixedCosts
 {
@@ -11,29 +12,35 @@ namespace FinancesServer.Data.FixedCosts
             _context = context;
         }
 
-        public Task CreateFixedCost(FixedCost exp)
+        public async Task CreateFixedCost(FixedCost fExp)
         {
-            throw new NotImplementedException();
+            if (fExp is null)
+                throw new ArgumentNullException(nameof(fExp));
+
+            await  _context.AddAsync(fExp);
         }
 
-        public void DeleteFixedCost(FixedCost exp)
+        public void DeleteFixedCost(FixedCost fExp)
         {
-            throw new NotImplementedException();
+            if (fExp is null)
+                throw new ArgumentNullException(nameof(fExp));
+            
+            _context.FixedCosts.Remove(fExp);
         }
 
-        public Task<IEnumerable<FixedCost>> GetAllCosts()
+        public async Task<IEnumerable<FixedCost>> GetAllCosts()
         {
-            throw new NotImplementedException();
+            return await _context.FixedCosts.ToListAsync();
         }
 
-        public Task<FixedCost?> GetFixedCostById(int id)
+        public async Task<FixedCost?> GetFixedCostById(int id)
         {
-            throw new NotImplementedException();
+            return await _context.FixedCosts.FirstOrDefaultAsync(fExp => fExp.Id == id);
         }
 
-        public Task SaveChanges()
+        public async Task SaveChanges()
         {
-            throw new NotImplementedException();
+            await _context.SaveChangesAsync();
         }
     }
 }
