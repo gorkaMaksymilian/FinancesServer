@@ -67,7 +67,7 @@
 
 @code {
     
-    [Parameter]
+    [Parameter, EditorRequired]
     public IEnumerable<T>? Data {get;set;}
     
     // To make Date EditTemplate work [it does not support complex content like "(Type to case)variable" ]
