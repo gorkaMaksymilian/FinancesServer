@@ -5,7 +5,9 @@ namespace FinancesServer.Models.FixedCosts
         Rent,
         Insurance,
         Mortgage,
-        UtilityBill,
+        WaterBill,
+        ElectricityBill,
+        InternetBill,
         Lease,
         LoanRepayment,
 
