@@ -18,18 +18,6 @@
             <Column T="T" Field="Id" Title="Id" IsEditable="false"/>
             <Column T="T" Field="Description" Title="Description"/>
             <Column T="T" Field="Amount" Title="Amount"/>
-            <Column T="T" Field="Category" Title="Category"/>
-            <Column T="T" Field="MonthOfFirstPayment" Title="MonthOfFirstPayment"/>
-        </Columns>
-    </MudDataGrid>
-
-
-    @* <MudDataGrid Items="@Data" Hover="@true" Dense="@true" Striped="@true" ReadOnly="@false" EditMode="DataGridEditMode.Form" EditTrigger="DataGridEditTrigger.Manual"
-                 T="T" CommittedItemChanges="@CommittedItemChanges" style="margin-top: 40px;">
-        <Columns>
-            <Column T="T" Field="Id" Title="Id" IsEditable="false"/>
-            <Column T="T" Field="Description" Title="Description"/>
-            <Column T="T" Field="Amount" Title="Amount"/>
             <Column T="T" Field="Category" Title="Category">
                 <EditTemplate>
                     @{categoryItem = context.Item.GetType()!.GetProperty("Category")!.GetValue(context.Item);}
@@ -75,7 +63,7 @@
         <PagerContent>
             <MudDataGridPager T="T" PageSizeOptions=@(new int[] {5, 10, 20}) />
         </PagerContent>
-    </MudDataGrid> *@
+    </MudDataGrid>
 }
 
 

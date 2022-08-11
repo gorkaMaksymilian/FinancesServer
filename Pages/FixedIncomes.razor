@@ -11,13 +11,8 @@
 
 <FixedForm Controller="fixedincome"/>
 
-@* <FixedDataGrid Data="@fixedIncomes"/> *@
-@if (fixedIncomes is not null) {
-    @foreach (FixedIncome item in fixedIncomes)
-    {
-        <p>@item.Id @item.Description</p>
-    }
-}
+<FixedDataGrid Data="@fixedIncomes"/>
+
 
 
 @code {
