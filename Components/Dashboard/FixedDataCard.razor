@@ -2,7 +2,7 @@
 <MudCard>
     <MudCardContent>
         <MudText Typo="Typo.overline" Color="@titleColor">STATIC @title THIS MONTH</MudText>
-         <MudText Typo="Typo.h4">@dolarSign 178</MudText>
+         <MudText Typo="Typo.h4">@dolarSign@SummedAmount</MudText>
     </MudCardContent>
 </MudCard>
 
@@ -18,5 +18,17 @@
     public ControllerEnum Controller {get;set;}
 
 
+    protected override void OnInitialized()
+    {
+        if (Controller == ControllerEnum.FixedIncomes) {
+            title = "INCOMES"; 
+            titleColor = Color.Success; 
+            dolarSign = "$";
+
+            StateHasChanged();
+        }
+        
+        
+    }
     
 }
