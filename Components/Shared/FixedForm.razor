@@ -1,0 +1,109 @@
+@using Models.FixedCosts
+@using Models.FixedIncomes
+@using Models.Shared
+@inject HttpClient Http
+@inject IReloadOtherComponentService ReloadOtherComponent
+@inject NavigationManager Navigator
+
+@if (Controller is not null) {
+    <MudGrid Justify="Justify.Center">
+        <MudItem>
+            <MudPaper Class="pa-4" Width="800px">
+                <MudForm @bind-IsValid="@validationSuccess" >
+                    <MudTextField T="string" Label="Description" HelperText="Max. 50 characters" Validation="@(new Func<string, string?>(SubjectLength))" @bind-Text="description"/>
+                    <MudSelect T="string" Label="Category" AnchorOrigin="Origin.BottomCenter" Required="true" RequiredError="Category is required!" @bind-Value="selectedCategory">
+                        @if (@Controller == "fixedincome"){
+                            @foreach (var category in Enum.GetNames(typeof(FixedIncomeCategoryEnum)))
+                            {
+                                <MudSelectItem Value="@(category)" />
+                            }
+                        }
+                        else if(@Controller == "fixedcost"){
+                            @foreach (var category in Enum.GetNames(typeof(FixedCostCategoryEnum)))
+                            {
+                                <MudSelectItem Value="@(category)" />
+                            }
+                        }
+                        
+                    </MudSelect>
+                    <MudNumericField @bind-Value="nullableDecimal" Format="N2" HideSpinButtons="true" Label="Amount" Required="true" RequiredError="Amount is required!"/>
+
+                    <MudSelect T="string" Label="Current month" AnchorOrigin="Origin.BottomCenter" Required="true" RequiredError="Current month is required!" @bind-Value="currentMonth">
+                        @foreach (var month in Enum.GetNames(typeof(MonthEnum)))
+                        {
+                            <MudSelectItem Value="@(month)" />
+                        }
+                    </MudSelect>
+
+
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" Disabled="@(!validationSuccess)" Class="ml-auto" style="margin-top:6px" @onclick="HandleValidSubmit">Submit</MudButton>
+                </MudForm>   
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+}
+
+
+@code {
+    [Parameter, EditorRequired] 
+    public string? Controller {get;set;}
+
+    bool validationSuccess = false;
+    decimal? nullableDecimal;
+    string? description;
+    string? selectedCategory;
+    string? currentMonth = ((MonthEnum)DateTime.Now.Month).ToString();
+
+
+
+    private string? SubjectLength(string arg)
+    {
+        if (string.IsNullOrWhiteSpace(arg))
+            return "Subject is required!";
+
+        if (arg.Length > 50)
+            return "Subject must be less than 50 characters";
+
+        
+        return null;
+    }
+
+    public async Task HandleValidSubmit()
+    {
+        MonthEnum myMonth;
+        Enum.TryParse<MonthEnum>(currentMonth, true, out myMonth);
+
+
+        if (Controller == "fixedincome")
+        {
+            FixedIncomeCategoryEnum myCategory;
+            Enum.TryParse<FixedIncomeCategoryEnum>(selectedCategory, true, out myCategory);
+
+            FixedIncome newFixedIncome = new FixedIncome() {
+                Description = description,
+                Amount = nullableDecimal!.Value,
+                Category = myCategory,
+                MonthOfFirstPayment = myMonth
+            };
+            
+            await Http.PostAsJsonAsync<FixedIncome>($"{Navigator.BaseUri}api/{Controller}", newFixedIncome);
+        }
+        else
+        {
+            FixedCostCategoryEnum myCategory;
+            Enum.TryParse<FixedCostCategoryEnum>(selectedCategory, true, out myCategory);
+
+
+            FixedCost newFixedCost = new FixedCost() {
+                Description = description,
+                Amount = nullableDecimal!.Value,
+                Category = myCategory,
+                MonthOfFirstPayment = myMonth
+            };
+            
+            await Http.PostAsJsonAsync<FixedCost>($"{Navigator.BaseUri}api/{Controller}", newFixedCost);
+        }
+        
+        ReloadOtherComponent.CallRequestRefresh();
+    }
+}

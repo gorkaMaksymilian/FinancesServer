@@ -1,7 +1,7 @@
 using FinancesServer.Models.Expenses;
 using Microsoft.EntityFrameworkCore;
 
-namespace FinancesServer.Data
+namespace FinancesServer.Data.Expenses
 {
     public class ExpenseRepo : IExpenseRepo
     {

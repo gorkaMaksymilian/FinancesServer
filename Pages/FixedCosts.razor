@@ -1,0 +1,33 @@
+@page "/fixedcosts"
+@using FinancesServer.Components.Shared
+@using Models.FixedCosts
+@inject NavigationManager Navigator
+@inject HttpClient Http
+@inject IReloadOtherComponentService ReloadOtherComponent
+
+<PageTitle>Fixed costs</PageTitle>
+
+<MudText Typo="Typo.h2" Align="Align.Center" GutterBottom="true">Update your fixed cost:</MudText>
+
+<FixedForm Controller="fixedcost"/>
+
+<FixedDataGrid Data="@fixedCosts"/>
+
+
+
+@code {
+    private List<FixedCost>? fixedCosts = new List<FixedCost>();
+
+    protected async override Task OnInitializedAsync()
+    {
+        ReloadOtherComponent.RefreshRequested += RefreshMe;
+        fixedCosts = await Http.GetFromJsonAsync<List<FixedCost>>($"{Navigator.BaseUri}api/fixedcost");
+        StateHasChanged();
+    }
+
+    private async void RefreshMe()
+    {
+        fixedCosts = await Http.GetFromJsonAsync<List<FixedCost>>($"{Navigator.BaseUri}api/fixedcost");
+        StateHasChanged();
+    }
+}

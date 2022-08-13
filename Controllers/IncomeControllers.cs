@@ -1,5 +1,5 @@
 using AutoMapper;
-using FinancesServer.Data;
+using FinancesServer.Data.Earnings;
 using FinancesServer.DTOs.Earnings;
 using FinancesServer.Models.Earnings;
 using Microsoft.AspNetCore.Mvc;

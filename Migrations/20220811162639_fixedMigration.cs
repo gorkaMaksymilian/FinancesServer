@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace FinancesServer.Migrations
 {
-    public partial class initialmigration : Migration
+    public partial class fixedMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -40,6 +40,38 @@ namespace FinancesServer.Migrations
                 {
                     table.PrimaryKey("PK_Expenses", x => x.Id);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "FixedCosts",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Description = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    Category = table.Column<int>(type: "int", nullable: false),
+                    MonthOfFirstPayment = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FixedCosts", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FixedIncomes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Description = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    Category = table.Column<int>(type: "int", nullable: false),
+                    MonthOfFirstPayment = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FixedIncomes", x => x.Id);
+                });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -49,6 +81,12 @@ namespace FinancesServer.Migrations
 
             migrationBuilder.DropTable(
                 name: "Expenses");
+
+            migrationBuilder.DropTable(
+                name: "FixedCosts");
+
+            migrationBuilder.DropTable(
+                name: "FixedIncomes");
         }
     }
 }

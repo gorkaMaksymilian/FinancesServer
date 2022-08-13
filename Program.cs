@@ -1,5 +1,8 @@
-using FinancesServer.Controllers;
 using FinancesServer.Data;
+using FinancesServer.Data.Earnings;
+using FinancesServer.Data.Expenses;
+using FinancesServer.Data.FixedIncomes;
+using FinancesServer.Data.FixedCosts;
 using FinancesServer.Services;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -24,10 +27,15 @@ sqlConBuilder.Password = builder.Configuration["UserPassword"];
 // Register custom DataAccess service with specified connection string
 builder.Services.AddDbContext<FinancesDbContext>(opt => opt.UseSqlServer(sqlConBuilder.ConnectionString));
 
-// Register repository for Income objects with dependency injection
+// Register repository for Income objects
 builder.Services.AddScoped<IIncomeRepo, IncomeRepo>();
-// Register repository for Expense objects with dependency injection
+// Register repository for Expense objects
 builder.Services.AddScoped<IExpenseRepo, ExpenseRepo>();
+
+// Register repository for FixedIncome objects
+builder.Services.AddScoped<IFixedIncomeRepo, FixedIncomeRepo>();
+// Register repository for FixedCost objects
+builder.Services.AddScoped<IFixedCostRepo, FixedCostRepo>();
 
 // Register AutoMapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

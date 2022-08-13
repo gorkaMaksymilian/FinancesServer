@@ -1,6 +1,6 @@
 using FinancesServer.Models.Earnings;
 
-namespace FinancesServer.Data
+namespace FinancesServer.Data.Earnings
 {
     public interface IIncomeRepo
     {

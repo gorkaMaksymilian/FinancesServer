@@ -23,7 +23,7 @@ Bootstrap replaced with MudBlazor.
 * [SQL-Server](https://docs.microsoft.com/en-us/sql/linux/sql-server-linux-docker-container-deployment?view=sql-server-ver16&pivots=cs1-bash) - version 2019-latest
 
 ## Setup
-`Soon`
+`Change '_host' in GetFormatedDataService to your endpoint`
 
 ## Code Examples
 Examples:
@@ -37,9 +37,11 @@ Ready:
 * Dashboard page.
 
 To-do list:
-* Make sure Expenses/Earnings validation works.
-* Dashboard compoments exception support (empty database etc.)
-
+* ~~Make sure Expenses/Earnings validation works.~~
+* ~~Dashboard compoments exception support (empty database etc.)~~
+* Support for weekly payments (like bi-weekly salary payments)
+* ~~FixedIncome and FixedCosts pages. (CRUD support)~~
+* Use FixedIncome and FixedCost in Dashboard page
 
 
 ## Status

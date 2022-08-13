@@ -1,0 +1,33 @@
+@page "/fixedincome"
+@using FinancesServer.Components.Shared
+@using Models.FixedIncomes
+@inject NavigationManager Navigator
+@inject HttpClient Http
+@inject IReloadOtherComponentService ReloadOtherComponent
+
+<PageTitle>Fixed income</PageTitle>
+
+<MudText Typo="Typo.h2" Align="Align.Center" GutterBottom="true">Update your fixed income:</MudText>
+
+<FixedForm Controller="fixedincome"/>
+
+<FixedDataGrid Data="@fixedIncomes"/>
+
+
+
+@code {
+    private List<FixedIncome>? fixedIncomes = new List<FixedIncome>();
+
+    protected async override Task OnInitializedAsync()
+    {
+        ReloadOtherComponent.RefreshRequested += RefreshMe;
+        fixedIncomes = await Http.GetFromJsonAsync<List<FixedIncome>>($"{Navigator.BaseUri}api/fixedincome");
+        StateHasChanged();
+    }
+
+    private async void RefreshMe()
+    {
+        fixedIncomes = await Http.GetFromJsonAsync<List<FixedIncome>>($"{Navigator.BaseUri}api/fixedincome");
+        StateHasChanged();
+    }
+}

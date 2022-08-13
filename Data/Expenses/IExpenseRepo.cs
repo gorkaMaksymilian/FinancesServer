@@ -1,6 +1,6 @@
 using FinancesServer.Models.Expenses;
 
-namespace FinancesServer.Data
+namespace FinancesServer.Data.Expenses
 {
     public interface IExpenseRepo
     {
