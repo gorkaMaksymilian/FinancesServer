@@ -2,17 +2,21 @@
 > Simple financial app created with Blazor Server.
 
 ## Table of contents
-* [General info](#general-info)
-* [Technologies](#technologies)
-* [Setup](#setup)
-* [Features](#features)
-* [Status](#status)
+- [Financial service](#financial-service)
+- [Table of contents](#table-of-contents)
+- [General info](#general-info)
+- [Technologies](#technologies)
+- [Setup](#setup)
+- [Code Examples](#code-examples)
+- [Features](#features)
+- [Status](#status)
 
 
 ## General info
 For now project contains only the simplest features.
 
 Bootstrap replaced with MudBlazor.
+
 Electricity bill adds to FixedCosts every other month. (base is MonthOfFirstPayment)
 
 
