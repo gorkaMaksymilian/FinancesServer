@@ -34,14 +34,12 @@ List of features ready and TODOs for future development.
 
 Ready:
 * Expenses and Earnings pages. (CRUD support)
+* FixedIncome and FixedCosts pages. (CRUD support)
+* Basic validation and exception handling for custom components.
 * Dashboard page.
 
 To-do list:
-* ~~Make sure Expenses/Earnings validation works.~~
-* ~~Dashboard compoments exception support (empty database etc.)~~
 * Support for weekly payments (like bi-weekly salary payments)
-* ~~FixedIncome and FixedCosts pages. (CRUD support)~~
-* Use FixedIncome and FixedCost in Dashboard page
 
 
 ## Status
