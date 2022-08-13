@@ -79,12 +79,12 @@
         if (currentMonthEarnings is not null && currentMonthExpenses is not null && lastMonthEarnings is not null && lastMonthExpenses is not null)
         {
             // Earnings (for DataCard)
-            summedCurrentMonthEarnings = GetSummedAmount(currentMonthEarnings);
+            summedCurrentMonthEarnings = GetSummedAmount(currentMonthEarnings) + GetSummedAmount(fixedIncome);
             decimal summedLastMonthEarnings = GetSummedAmount(lastMonthEarnings);
             earningsPercentageChange = GetPercentageChange(summedLastMonthEarnings,summedCurrentMonthEarnings);
 
             // Expenses (for DataCard)
-            summedCurrentMonthExpenses = GetSummedAmount(currentMonthExpenses);
+            summedCurrentMonthExpenses = GetSummedAmount(currentMonthExpenses) + GetSummedAmount(fixedCosts);
             decimal summedLastMonthExpenses = GetSummedAmount(lastMonthExpenses);
             expensesPercentageChange = GetPercentageChange(summedLastMonthExpenses, summedCurrentMonthExpenses);
 
