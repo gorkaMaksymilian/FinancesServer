@@ -23,7 +23,7 @@ Bootstrap replaced with MudBlazor.
 * [SQL-Server](https://docs.microsoft.com/en-us/sql/linux/sql-server-linux-docker-container-deployment?view=sql-server-ver16&pivots=cs1-bash) - version 2019-latest
 
 ## Setup
-`Soon`
+`Change '_host' in GetFormatedDataService to your endpoint`
 
 ## Code Examples
 Examples:
