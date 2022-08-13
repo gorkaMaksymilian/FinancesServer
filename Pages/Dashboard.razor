@@ -10,10 +10,10 @@
         <DataCard Controller="@ControllerEnum.Earnings" SummedAmount="@summedCurrentMonthEarnings" PercentageChange="@earningsPercentageChange"/>
     </MudItem>
     <MudItem xs="4">
-        <DataCard Controller="@ControllerEnum.Expenses" SummedAmount="@summedCurrentMonthExpenses" PercentageChange="@expensesPercentageChange"/>
+        <DataCard Controller="@ControllerEnum.Profit" SummedAmount="@summedCurrentMonthProfit" PercentageChange="@profitPercentageChange"/>
     </MudItem>
     <MudItem xs="4">
-        <DataCard Controller="@ControllerEnum.Profit" SummedAmount="@summedCurrentMonthProfit" PercentageChange="@profitPercentageChange"/>
+        <DataCard Controller="@ControllerEnum.Expenses" SummedAmount="@summedCurrentMonthExpenses" PercentageChange="@expensesPercentageChange"/>
     </MudItem>
 
     <MudItem xs="6">
@@ -24,10 +24,10 @@
     </MudItem>
 
     <MudItem xs="6">
-        <FixedDataCard Controller="@ControllerEnum.FixedCosts" SummedAmount="@summedFixedCosts"/>
+        <FixedDataCard Controller="@ControllerEnum.FixedIncome" SummedAmount="@summedFixedIncome"/>
     </MudItem>
     <MudItem xs="6">
-        <FixedDataCard Controller="@ControllerEnum.FixedIncome" SummedAmount="@summedFixedIncome"/>
+        <FixedDataCard Controller="@ControllerEnum.FixedCosts" SummedAmount="@summedFixedCosts"/>
     </MudItem>
 </MudGrid>
 
