@@ -3,13 +3,13 @@
 
 ## Table of contents
 - [Financial service](#financial-service)
-- [Table of contents](#table-of-contents)
-- [General info](#general-info)
-- [Technologies](#technologies)
-- [Setup](#setup)
-- [Code Examples](#code-examples)
-- [Features](#features)
-- [Status](#status)
+  - [Table of contents](#table-of-contents)
+  - [General info](#general-info)
+  - [Technologies](#technologies)
+  - [Setup](#setup)
+  - [Code Examples](#code-examples)
+  - [Features](#features)
+  - [Status](#status)
 
 
 ## General info
@@ -47,7 +47,9 @@ Ready:
 
 To-do list:
 * Support for weekly payments (like bi-weekly salary payments)
-* Support for monthly elecriticy bills payment
+* Support for monthly elecriticy bills payment (Just add category and write some code in GetFormatedDataService)
+* Write some tests
+
 
 
 ## Status
