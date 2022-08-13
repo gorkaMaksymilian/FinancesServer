@@ -80,12 +80,12 @@
         {
             // Earnings (for DataCard)
             summedCurrentMonthEarnings = GetSummedAmount(currentMonthEarnings) + GetSummedAmount(fixedIncome);
-            decimal summedLastMonthEarnings = GetSummedAmount(lastMonthEarnings);
+            decimal summedLastMonthEarnings = GetSummedAmount(lastMonthEarnings) + GetSummedAmount(fixedIncome);
             earningsPercentageChange = GetPercentageChange(summedLastMonthEarnings,summedCurrentMonthEarnings);
 
             // Expenses (for DataCard)
             summedCurrentMonthExpenses = GetSummedAmount(currentMonthExpenses) + GetSummedAmount(fixedCosts);
-            decimal summedLastMonthExpenses = GetSummedAmount(lastMonthExpenses);
+            decimal summedLastMonthExpenses = GetSummedAmount(lastMonthExpenses) + GetSummedAmount(fixedCosts);
             expensesPercentageChange = GetPercentageChange(summedLastMonthExpenses, summedCurrentMonthExpenses);
 
             // Profit (for DataCard)

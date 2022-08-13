@@ -4,7 +4,7 @@
     <MudCardHeader style="padding-bottom: 0px;">
         <CardHeaderContent>
             <MudText Typo="Typo.overline" Color="@headerColor" Style="font-size: 1.2rem">
-                @title!.ToUpper() THIS MONTH
+                @headerText THIS MONTH
             </MudText>
         </CardHeaderContent>
         <CardHeaderActions>
@@ -58,6 +58,7 @@
     string? headerIcon;
     Color headerColor;
     string? title;
+    string? headerText;
     Color percentageLessThanZeroColor = Color.Error;
     Color percentageGreaterThanZeroColor = Color.Success;
     string dolarSign = "$";
@@ -67,12 +68,14 @@
     {
         if (Controller == ControllerEnum.Earnings) {
             title = "Earnings"; 
+            headerText = "ALL EARNINGS";
             headerColor = Color.Success; 
             headerIcon = Icons.Filled.AttachMoney;
 
         }
         else if (Controller == ControllerEnum.Expenses) {
             title = "Expenses";  
+            headerText = "ALL EXPENSES";
             headerColor = Color.Error;  
             headerIcon = Icons.Filled.MoneyOff;
             percentageLessThanZeroColor = Color.Success;
@@ -80,22 +83,19 @@
             dolarSign = "-$";
         }
         else if (Controller == ControllerEnum.Profit) {
-            headerColor = Color.Info; 
+            headerColor = Color.Info;
 
-
-            if (SummedAmount >= 0) 
+            if (SummedAmount > 0) 
             {
                 title = "Profit";  
+                headerText=title.ToUpper();
                 headerIcon = Icons.Outlined.Outbound;
             }
-            else if (SummedAmount < 0) 
+            else
             {
                 title = "Loss";  
-                SummedAmount = Math.Abs(SummedAmount);
+                headerText=title.ToUpper();
                 dolarSign = "-$";
-                headerIcon = Icons.Outlined.Outbound;
-                percentageLessThanZeroColor = Color.Success;
-                percentageGreaterThanZeroColor = Color.Error;
             }
             
         }
