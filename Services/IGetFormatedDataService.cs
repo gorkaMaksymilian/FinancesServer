@@ -6,5 +6,7 @@ namespace FinancesServer.Services
     {
         Task<IEnumerable<MonthlyItem>> GetMonthlyEarnings(int month, int year);
         Task<IEnumerable<MonthlyItem>> GetMonthlyExpenses(int month, int year);
+        Task<IEnumerable<MonthlyItem>> GetFixedCosts();
+        Task<IEnumerable<MonthlyItem>> GetFixedIncomes();
     }
 }
