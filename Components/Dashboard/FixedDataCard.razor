@@ -1,0 +1,22 @@
+@using Models.Dashboard
+<MudCard>
+    <MudCardContent>
+        <MudText Typo="Typo.overline" Color="@titleColor">STATIC @title THIS MONTH</MudText>
+         <MudText Typo="Typo.h4">@dolarSign 178</MudText>
+    </MudCardContent>
+</MudCard>
+
+@code {
+    string title = "COSTS";
+    Color titleColor = Color.Error;
+    string dolarSign = "-$";
+
+    [Parameter, EditorRequired]
+    public decimal SummedAmount {get;set;}
+
+    [Parameter, EditorRequired]
+    public ControllerEnum Controller {get;set;}
+
+
+    
+}
