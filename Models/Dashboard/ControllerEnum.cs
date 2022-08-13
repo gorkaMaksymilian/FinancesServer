@@ -6,6 +6,6 @@ namespace FinancesServer.Models.Dashboard
         Expenses,
         Profit,
         FixedCosts,
-        FixedIncomes
+        FixedIncome
     }
 }
