@@ -13,6 +13,7 @@
 For now project contains only the simplest features.
 
 Bootstrap replaced with MudBlazor.
+Electricity bill adds to FixedCosts every other month. (base is MonthOfFirstPayment)
 
 
 ## Technologies
@@ -23,7 +24,9 @@ Bootstrap replaced with MudBlazor.
 * [SQL-Server](https://docs.microsoft.com/en-us/sql/linux/sql-server-linux-docker-container-deployment?view=sql-server-ver16&pivots=cs1-bash) - version 2019-latest
 
 ## Setup
-`Change '_host' in GetFormatedDataService to your endpoint`
+* Change '_host' in GetFormatedDataService to your endpoint
+* Create your own '.env' file to store database password or just paste your password into 'docker-compose.yaml'
+* Set user-secrets for 'sqlConBuilder' in 'Program.cs' or just paste your credentials as string
 
 ## Code Examples
 Examples:
@@ -40,6 +43,7 @@ Ready:
 
 To-do list:
 * Support for weekly payments (like bi-weekly salary payments)
+* Support for monthly elecriticy bills payment
 
 
 ## Status
