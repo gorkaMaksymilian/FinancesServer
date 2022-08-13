@@ -4,6 +4,8 @@ namespace FinancesServer.Models.Dashboard
     {
         Earnings,
         Expenses,
-        Profit
+        Profit,
+        FixedCosts,
+        FixedIncomes
     }
 }
