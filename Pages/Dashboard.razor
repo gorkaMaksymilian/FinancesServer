@@ -45,6 +45,13 @@
     </MudItem>
 </MudGrid>
 
+@if (test is not null)
+{
+    foreach (var item in test) 
+    {
+        <p>@item.Amount , @item.Category</p>
+    }
+}
 
 
 @code {
@@ -74,9 +81,10 @@
     string[]? currentMonthExpensesCategories;
     double[]? currentMonthExpensesAmounts;
 
-
+    IEnumerable<MonthlyItem>? test;
     protected override async Task OnInitializedAsync()
     {
+        test = await dataService.GetFixedCosts();
         // Get all data needed
         currentMonthEarnings = await dataService.GetMonthlyEarnings(currentDate.Month, currentDate.Year);
         currentMonthExpenses = await dataService.GetMonthlyExpenses(currentDate.Month, currentDate.Year);
