@@ -84,7 +84,7 @@
     IEnumerable<MonthlyItem>? test;
     protected override async Task OnInitializedAsync()
     {
-        test = await dataService.GetFixedCosts();
+        test = await dataService.GetFixedCosts(currentDate.AddMonths(1).Month);
         // Get all data needed
         currentMonthEarnings = await dataService.GetMonthlyEarnings(currentDate.Month, currentDate.Year);
         currentMonthExpenses = await dataService.GetMonthlyExpenses(currentDate.Month, currentDate.Year);
