@@ -80,9 +80,24 @@
             dolarSign = "-$";
         }
         else if (Controller == ControllerEnum.Profit) {
-            title = "Profit";  
-            headerColor = Color.Info;  
-            headerIcon = Icons.Outlined.Outbound;
+            headerColor = Color.Info; 
+
+
+            if (SummedAmount >= 0) 
+            {
+                title = "Profit";  
+                headerIcon = Icons.Outlined.Outbound;
+            }
+            else if (SummedAmount < 0) 
+            {
+                title = "Loss";  
+                SummedAmount = Math.Abs(SummedAmount);
+                dolarSign = "-$";
+                headerIcon = Icons.Outlined.Outbound;
+                percentageLessThanZeroColor = Color.Success;
+                percentageGreaterThanZeroColor = Color.Error;
+            }
+            
         }
         
         StateHasChanged();
