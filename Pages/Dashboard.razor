@@ -24,7 +24,7 @@
     </MudItem>
 
     <MudItem xs="3">
-        <FixedDataCard Controller="@ControllerEnum.FixedCosts"/>
+        <FixedDataCard Controller="@ControllerEnum.FixedCosts" SummedAmount="@summedFixedCosts"/>
     </MudItem>
     <MudItem xs="3">
         <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-8">
@@ -43,14 +43,6 @@
     </MudItem>
 </MudGrid>
 
-@if (test is not null)
-{
-    foreach (var item in test) 
-    {
-        <p>@item.Amount , @item.Category</p>
-    }
-}
-
 
 @code {
     // Used in getting data from database
@@ -58,9 +50,12 @@
     IEnumerable<MonthlyItem>? currentMonthExpenses;
     IEnumerable<MonthlyItem>? lastMonthEarnings;
     IEnumerable<MonthlyItem>? lastMonthExpenses;
+    IEnumerable<MonthlyItem>? fixedCosts;
 
     DateTime currentDate = DateTime.Today;
 
+    // Used to pass data to FixedDataCard component
+    decimal summedFixedCosts;
 
     // Used to pass data to DataCard component
     decimal profitPercentageChange;
@@ -79,15 +74,16 @@
     string[]? currentMonthExpensesCategories;
     double[]? currentMonthExpensesAmounts;
 
-    IEnumerable<MonthlyItem>? test;
+
     protected override async Task OnInitializedAsync()
     {
-        test = await dataService.GetFixedCosts(currentDate.AddMonths(1).Month);
         // Get all data needed
         currentMonthEarnings = await dataService.GetMonthlyEarnings(currentDate.Month, currentDate.Year);
         currentMonthExpenses = await dataService.GetMonthlyExpenses(currentDate.Month, currentDate.Year);
         lastMonthEarnings = await dataService.GetMonthlyEarnings(currentDate.AddMonths(-1).Month, currentDate.Year);
         lastMonthExpenses = await dataService.GetMonthlyExpenses(currentDate.AddMonths(-1).Month, currentDate.Year);
+
+        fixedCosts = await dataService.GetFixedCosts(currentDate.AddMonths(1).Month);
 
         if (currentMonthEarnings is not null && currentMonthExpenses is not null && lastMonthEarnings is not null && lastMonthExpenses is not null)
         {
@@ -116,6 +112,8 @@
             FillCategoryArray(currentMonthExpenses, ref currentMonthExpensesCategories);
             FillAmountArray(currentMonthExpenses, ref currentMonthExpensesAmounts);
         }
+
+        summedFixedCosts = GetSummedAmount(fixedCosts);
     }
 
     protected decimal GetSummedAmount(IEnumerable<MonthlyItem> monthlyItems)
