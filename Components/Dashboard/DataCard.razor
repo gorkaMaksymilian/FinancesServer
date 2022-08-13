@@ -45,13 +45,15 @@
 
 @code {
     [Parameter, EditorRequired]
+    public decimal SummedAmount {get;set;}
+
+    [Parameter, EditorRequired]
     public ControllerEnum Controller {get;set;}
 
     [Parameter, EditorRequired]
     public decimal PercentageChange {get;set;}
 
-    [Parameter, EditorRequired]
-    public decimal SummedAmount {get;set;}
+
 
 
     // Styling and text changes based on given Controller
@@ -62,7 +64,6 @@
     Color percentageLessThanZeroColor = Color.Error;
     Color percentageGreaterThanZeroColor = Color.Success;
     string dolarSign = "$";
-
 
     protected override void OnInitialized()
     {
@@ -84,17 +85,18 @@
         }
         else if (Controller == ControllerEnum.Profit) {
             headerColor = Color.Info;
-
-            if (SummedAmount > 0) 
+            headerIcon = Icons.Outlined.Outbound;
+            
+            if (SummedAmount >= 0) 
             {
                 title = "Profit";  
                 headerText=title.ToUpper();
-                headerIcon = Icons.Outlined.Outbound;
             }
             else
             {
                 title = "Loss";  
                 headerText=title.ToUpper();
+                SummedAmount = Math.Abs(SummedAmount);
                 dolarSign = "-$";
             }
             
