@@ -12,8 +12,8 @@
 <MudContainer class="split right">
     <MudContainer class="centered">
         <MudContainer class="auth-form-root">
-            <MudText Typo="Typo.h2" Align="Align.Left">Sign in:</MudText>
-            <MudTextField @bind-Value="@Login" Label="Email adress" Variant="Variant.Outlined"></MudTextField>
+            <MudText Typo="Typo.h2" Align="Align.Left">Sign in</MudText>
+            <MudTextField @bind-Value="@Email" Label="Email adress" Variant="Variant.Outlined"></MudTextField>
             <MudTextField @bind-Value="@Password" Label="Password" Variant="Variant.Outlined"></MudTextField>
             <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" Style="margin-top: 6px;">Sign in now</MudButton>
             <MudNavLink Href="/signup">Don't have an accout? Sign up</MudNavLink>
@@ -61,6 +61,6 @@
 </style>
 
 @code {
-    public string? Login {get;set;}
+    public string? Email {get;set;}
     public string? Password {get;set;}
 }
