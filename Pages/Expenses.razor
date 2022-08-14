@@ -7,12 +7,13 @@
 
 <PageTitle>Expenses</PageTitle>
 
-<MudText Typo="Typo.h2" Align="Align.Center" GutterBottom="true">Update your expenses:</MudText>
+<MudContainer MaxWidth="MaxWidth.Large">
+    <MudText Typo="Typo.h2" Align="Align.Center" GutterBottom="true">Update your expenses:</MudText>
 
-<VariableForm Controller="expense"/>
+    <VariableForm Controller="expense"/>
 
-<VariableDataGrid Data=@expenses/>
-
+    <VariableDataGrid Data=@expenses/>
+</MudContainer>
 
 @code {
     private List<Expense>? expenses = new List<Expense>();

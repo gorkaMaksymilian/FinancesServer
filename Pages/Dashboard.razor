@@ -5,34 +5,35 @@
 
 <PageTitle>Dashboard</PageTitle>
 
+
 @if (currentMonthEarnings is not null && currentMonthExpenses is not null && lastMonthEarnings is not null && lastMonthExpenses is not null &&
      fixedCosts is not null && fixedIncome is not null) 
 {
-<MudGrid Justify="Justify.SpaceBetween" Style="margin-top: 12px">
-    <MudItem xs="4">
-        <DataCard Controller="@ControllerEnum.Earnings" SummedAmount="@summedCurrentMonthEarnings" PercentageChange="@earningsPercentageChange"/>
-    </MudItem>
-    <MudItem xs="4">
-        <DataCard Controller="@ControllerEnum.Profit" SummedAmount="@summedCurrentMonthProfit" PercentageChange="@profitPercentageChange"/>
-    </MudItem>
-    <MudItem xs="4">
-        <DataCard Controller="@ControllerEnum.Expenses" SummedAmount="@summedCurrentMonthExpenses" PercentageChange="@expensesPercentageChange"/>
-    </MudItem>
+    <MudGrid Justify="Justify.SpaceBetween" Style="margin-top: 12px">
+        <MudItem xs="4">
+            <DataCard Controller="@ControllerEnum.Earnings" SummedAmount="@summedCurrentMonthEarnings" PercentageChange="@earningsPercentageChange"/>
+        </MudItem>
+        <MudItem xs="4">
+            <DataCard Controller="@ControllerEnum.Profit" SummedAmount="@summedCurrentMonthProfit" PercentageChange="@profitPercentageChange"/>
+        </MudItem>
+        <MudItem xs="4">
+            <DataCard Controller="@ControllerEnum.Expenses" SummedAmount="@summedCurrentMonthExpenses" PercentageChange="@expensesPercentageChange"/>
+        </MudItem>
 
-    <MudItem xs="6">
-        <DonutCard Controller="@ControllerEnum.Earnings" AmountArray="@currentMonthEarningsAmounts" Labels="@currentMonthEarningsCategories"/>
-    </MudItem>
-    <MudItem xs="6">
-        <DonutCard Controller="@ControllerEnum.Expenses" AmountArray="@currentMonthExpensesAmounts" Labels="@currentMonthExpensesCategories"/>
-    </MudItem>
+        <MudItem xs="6">
+            <DonutCard Controller="@ControllerEnum.Earnings" AmountArray="@currentMonthEarningsAmounts" Labels="@currentMonthEarningsCategories"/>
+        </MudItem>
+        <MudItem xs="6">
+            <DonutCard Controller="@ControllerEnum.Expenses" AmountArray="@currentMonthExpensesAmounts" Labels="@currentMonthExpensesCategories"/>
+        </MudItem>
 
-    <MudItem xs="6">
-        <FixedDataCard Controller="@ControllerEnum.FixedIncome" SummedAmount="@summedFixedIncome"/>
-    </MudItem>
-    <MudItem xs="6">
-        <FixedDataCard Controller="@ControllerEnum.FixedCosts" SummedAmount="@summedFixedCosts"/>
-    </MudItem>
-</MudGrid>
+        <MudItem xs="6">
+            <FixedDataCard Controller="@ControllerEnum.FixedIncome" SummedAmount="@summedFixedIncome"/>
+        </MudItem>
+        <MudItem xs="6">
+            <FixedDataCard Controller="@ControllerEnum.FixedCosts" SummedAmount="@summedFixedCosts"/>
+        </MudItem>
+    </MudGrid>
 }
 
 

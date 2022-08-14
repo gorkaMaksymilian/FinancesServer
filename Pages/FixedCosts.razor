@@ -7,12 +7,13 @@
 
 <PageTitle>Fixed costs</PageTitle>
 
-<MudText Typo="Typo.h2" Align="Align.Center" GutterBottom="true">Update your fixed cost:</MudText>
+<MudContainer MaxWidth="MaxWidth.Large">
+    <MudText Typo="Typo.h2" Align="Align.Center" GutterBottom="true">Update your fixed cost:</MudText>
 
-<FixedForm Controller="fixedcost"/>
+    <FixedForm Controller="fixedcost"/>
 
-<FixedDataGrid Data="@fixedCosts"/>
-
+    <FixedDataGrid Data="@fixedCosts"/>
+</MudContainer>
 
 
 @code {

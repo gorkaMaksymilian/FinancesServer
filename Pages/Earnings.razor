@@ -7,11 +7,13 @@
 
 <PageTitle>Earnings</PageTitle>
 
-<MudText Typo="Typo.h2" Align="Align.Center" GutterBottom="true">Update your earnings:</MudText>
+<MudContainer MaxWidth="MaxWidth.Large">
+    <MudText Typo="Typo.h2" Align="Align.Center" GutterBottom="true">Update your earnings:</MudText>
 
-<VariableForm Controller="income"/>
+    <VariableForm Controller="income"/>
 
-<VariableDataGrid Data=@earnings/>
+    <VariableDataGrid Data=@earnings/>
+</MudContainer>
 
 
 @code {
