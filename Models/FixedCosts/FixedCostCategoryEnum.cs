@@ -10,7 +10,8 @@ namespace FinancesServer.Models.FixedCosts
         InternetBill,
         Lease,
         LoanRepayment,
-        Subscription
+        Subscription,
+        MonthlyElectricityBill
 
     }
 }
