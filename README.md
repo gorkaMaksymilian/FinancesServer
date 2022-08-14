@@ -48,10 +48,9 @@ Ready:
 To-do list:
 * Support for weekly payments (like bi-weekly salary payments)
 * Support for monthly elecriticy bills payment (Just add category and write some code in GetFormatedDataService)
-* Write some tests
 
 
 
 ## Status
-Project is: _in progress_
+Project is: _proof of concept_
 
