@@ -46,8 +46,7 @@ Ready:
 * Dashboard page.
 
 To-do list:
-* Support for weekly payments (like bi-weekly salary payments)
-* Support for monthly elecriticy bills payment (Just add category and write some code in GetFormatedDataService)
+* Registration/Login pages. (rebuild database once again to support this feature)
 
 
 
