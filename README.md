@@ -19,6 +19,8 @@ Bootstrap replaced with MudBlazor.
 
 Electricity bill adds to FixedCosts every other month. (base is MonthOfFirstPayment)
 
+CSS Isolation did not work so i used ether inline CSS or style section
+
 
 ## Technologies
 * [.Net](https://dotnet.microsoft.com/en-us/download) - version 6.0.301
