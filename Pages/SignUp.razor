@@ -1,0 +1,71 @@
+@page "/signup"
+
+<PageTitle>Sign up</PageTitle>
+
+<MudContainer class="split left">
+    <MudContainer class="centered">
+        <MudText Typo="Typo.h4" Align="Align.Center" Color="Color.Primary">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis auctor elit vitae ex pulvinar dictum.</MudText>
+        <MudText Typo="Typo.subtitle1" Align="Align.Center" Color="Color.Primary">Nunc sit amet sagittis libero.</MudText>
+    </MudContainer>
+</MudContainer>
+
+<MudContainer class="split right">
+    <MudContainer class="centered">
+        <MudContainer class="auth-form-root">
+            <MudText Typo="Typo.h2" Align="Align.Left">Create new account</MudText>
+            <MudTextField @bind-Value="@FirstName" Label="First name" Variant="Variant.Outlined"></MudTextField>
+            <MudTextField @bind-Value="@LastName" Label="Last name" Variant="Variant.Outlined"></MudTextField>
+            <MudTextField @bind-Value="@Email" Label="Email adress" Variant="Variant.Outlined"></MudTextField>
+            <MudTextField @bind-Value="@Password" Label="Password" Variant="Variant.Outlined"></MudTextField>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" Style="margin-top: 6px;">Sign in now</MudButton>
+            <MudNavLink Href="/signup">Don't have an accout? Sign up</MudNavLink>
+        </MudContainer>
+    </MudContainer>
+</MudContainer>
+
+<style>
+    .split {
+        height: 100%;
+        width: 50%;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        overflow-x: hidden;
+        padding-top: 20px;
+    }
+
+    .auth-form-root {
+        flex-basis: 720px;
+        padding-left: 150px;
+        padding-right: 150px;
+        padding-bottom: 0px;
+    }
+
+    /* Control the left side */
+    .left {
+        left: 0;
+        background-color: #111;
+    }
+
+    /* Control the right side */
+    .right {
+        right: 0;
+    }
+
+    /* If you want the content centered horizontally and vertically */
+    .centered {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+    }
+</style>
+
+@code {
+    public string? Email {get;set;}
+    public string? Password {get;set;}
+    public string? FirstName {get;set;}
+    public string? LastName {get;set;}
+
+}
