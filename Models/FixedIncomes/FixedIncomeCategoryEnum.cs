@@ -5,7 +5,8 @@ namespace FinancesServer.Models.FixedIncomes
         Salary,
         Pension,
         DisabilityLivingAllowance,
-        Welfare
+        Welfare,
+        BiweeklySalary
 
     }
 }
