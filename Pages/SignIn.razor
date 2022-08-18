@@ -1,4 +1,6 @@
 @page "/signin"
+@using System.ComponentModel.DataAnnotations
+@using System.Text.RegularExpressions
 
 <PageTitle>Sign in</PageTitle>
 
@@ -13,9 +15,16 @@
     <MudContainer class="centered">
         <MudContainer class="auth-form-root">
             <MudText Typo="Typo.h2" Align="Align.Left">Sign in</MudText>
-            <MudTextField @bind-Value="@Email" Label="Email adress" Variant="Variant.Outlined"></MudTextField>
-            <MudTextField @bind-Value="@Password" Label="Password" Variant="Variant.Outlined"></MudTextField>
-            <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" Style="margin-top: 6px;">Sign in now</MudButton>
+            <MudForm @bind-IsValid="@success">
+                <MudTextField @bind-Value="@Email" Label="Email adress" Variant="Variant.Outlined" Required RequiredError="The email address is invalid"
+                            Validation="@(new EmailAddressAttribute() {ErrorMessage = "The email address is invalid"})"/>
+                <MudTextField @ref="PasswordField" T="string" Label="Password" Variant="Variant.Outlined" InputType="InputType.Password" Required RequiredError="Password is required!" 
+                            Validation="@(new Func<string, IEnumerable<string>>(PasswordStrength))" HelperText="Choose a strong password"/>
+                <MudTextField T="string" Label="Password" Variant="Variant.Outlined" InputType="InputType.Password" 
+                              Validation="@(new Func<string, string?>(PasswordMatch))" HelperText="Repeat the password"/>
+
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" Style="margin-top: 6px;" Disabled="@(!success)">Sign in now</MudButton>
+            </MudForm>
             <MudNavLink Href="/signup">Don't have an accout? Sign up</MudNavLink>
         </MudContainer>
     </MudContainer>
@@ -62,5 +71,30 @@
 
 @code {
     public string? Email {get;set;}
-    public string? Password {get;set;}
+    MudTextField<string>? PasswordField;
+    bool success;
+
+    private IEnumerable<string> PasswordStrength(string pw)
+    {
+        if (string.IsNullOrWhiteSpace(pw))
+        {
+            yield return "Password is required!";
+            yield break;
+        }
+        if (pw.Length < 8)
+            yield return "Password must be at least of length 8";
+        if (!Regex.IsMatch(pw, @"[A-Z]"))
+            yield return "Password must contain at least one capital letter";
+        if (!Regex.IsMatch(pw, @"[a-z]"))
+            yield return "Password must contain at least one lowercase letter";
+        if (!Regex.IsMatch(pw, @"[0-9]"))
+            yield return "Password must contain at least one digit";
+    }
+
+    private string? PasswordMatch(string arg)
+    {
+        if (PasswordField!.Value != arg)
+            return "Passwords don't match";
+        return null;
+    }
 }
