@@ -16,6 +16,7 @@
         <MudContainer class="auth-form-root">
             <MudText Typo="Typo.h2" Align="Align.Left">Sign in</MudText>
             <MudForm @bind-IsValid="@success">
+                <MudTextField @bind-Value="@Username" Label="Username"  Variant="Variant.Outlined" Required="true" RequiredError="User name is required!"/>
                 <MudTextField @bind-Value="@Email" Label="Email adress" Variant="Variant.Outlined" Required RequiredError="The email address is invalid"
                             Validation="@(new EmailAddressAttribute() {ErrorMessage = "The email address is invalid"})"/>
                 <MudTextField @ref="PasswordField" T="string" Label="Password" Variant="Variant.Outlined" InputType="InputType.Password" Required RequiredError="Password is required!" 
@@ -71,6 +72,7 @@
 
 @code {
     public string? Email {get;set;}
+    public string? Username {get;set;}
     MudTextField<string>? PasswordField;
     bool success;
 
