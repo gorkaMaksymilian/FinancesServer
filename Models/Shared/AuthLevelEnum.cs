@@ -1,4 +1,4 @@
-namespace FinancesServer.Models.SignUp
+namespace FinancesServer.Models.Shared
 {
     public enum AuthLevelEnum
     {

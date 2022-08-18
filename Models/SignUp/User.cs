@@ -1,3 +1,5 @@
+using FinancesServer.Models.Shared;
+
 namespace FinancesServer.Models.SignUp
 {
     public class User
