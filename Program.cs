@@ -7,7 +7,7 @@ using FinancesServer.Services;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using MudBlazor.Services;
-
+using Blazored.LocalStorage;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,6 +48,9 @@ builder.Services.AddScoped<IReloadOtherComponentService, ReloadOtherComponentSer
 
 // Register Service that gets formated data from DB
 builder.Services.AddScoped<IGetFormatedDataService,GetFormatedDataService>();
+
+// Register LocalStorage
+builder.Services.AddBlazoredLocalStorage();
 
 
 var app = builder.Build();
