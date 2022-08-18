@@ -1,6 +1,7 @@
 @page "/signin"
 @using System.ComponentModel.DataAnnotations
 @using System.Text.RegularExpressions
+@inject ILocalStorageService LocalStorage
 
 <PageTitle>Sign in</PageTitle>
 
@@ -24,7 +25,7 @@
                 <MudTextField T="string" Label="Password" Variant="Variant.Outlined" InputType="InputType.Password" 
                               Validation="@(new Func<string, string?>(PasswordMatch))" HelperText="Repeat the password"/>
 
-                <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" Style="margin-top: 6px;" Disabled="@(!success)">Sign in now</MudButton>
+                <MudButton @onclick="HandleLogin" Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" Style="margin-top: 6px;" Disabled="@(!success)">Sign in now</MudButton>
             </MudForm>
             <MudNavLink Href="/signup">Don't have an accout? Sign up</MudNavLink>
         </MudContainer>
@@ -98,5 +99,10 @@
         if (PasswordField!.Value != arg)
             return "Passwords don't match";
         return null;
+    }
+
+    private async void HandleLogin() 
+    {
+        await LocalStorage.SetItemAsync<string>("username", Username!);
     }
 }
