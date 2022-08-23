@@ -1,4 +1,7 @@
 ﻿@inject ILocalStorageService LocalStorage
+@inject NavigationManager Navigator
+@inject AuthenticationStateProvider AuthStateProvider
+
 
 <MudNavMenu>
     <MudNavLink Href="/" Match="NavLinkMatch.All" Icon="@Icons.Filled.Store">Main Page</MudNavLink>
@@ -29,5 +32,8 @@
     private async void Logout()
     {
         await LocalStorage.RemoveItemAsync("username");
+        await AuthStateProvider.GetAuthenticationStateAsync();
+
+        Navigator.NavigateTo("");
     }
 }
