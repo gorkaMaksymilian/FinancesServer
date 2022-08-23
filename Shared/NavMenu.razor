@@ -1,14 +1,34 @@
-﻿<MudNavMenu>
+﻿@inject ILocalStorageService LocalStorage
+@inject AuthenticationStateProvider AuthStateProvider
+
+<MudNavMenu>
     <MudNavLink Href="/" Match="NavLinkMatch.All" Icon="@Icons.Filled.Store">Main Page</MudNavLink>
-    <MudNavLink Icon="@Icons.Filled.Login" Href="/signin">Sign in</MudNavLink>
-    <MudNavLink Icon="@Icons.Filled.Analytics" Href="/dashboard">Dashboard</MudNavLink>
-    <MudNavLink Icon="@Icons.Filled.AttachMoney" Href="/fixedincome">Fixed Income</MudNavLink>
-    <MudNavLink Icon="@Icons.Filled.MoneyOff" Href="/fixedcosts">Fixed Costs</MudNavLink>
-    <MudNavLink Icon="@Icons.Filled.KeyboardDoubleArrowUp" Href="/earnings">One-Time Earnings</MudNavLink>
-    <MudNavLink Icon="@Icons.Filled.KeyboardDoubleArrowDown" Href="/expenses">One-Time Expenses</MudNavLink>
+
+    <AuthorizeView>
+        <NotAuthorized>
+            <MudNavLink Icon="@Icons.Filled.Login" Href="/signin">Sign in</MudNavLink>
+        </NotAuthorized>
+        <Authorized>
+            <MudNavLink Icon="@Icons.Filled.Logout" OnClick="Logout">Logout</MudNavLink>
+            <MudNavLink Icon="@Icons.Filled.Analytics" Href="/dashboard">Dashboard</MudNavLink>
+            <MudNavLink Icon="@Icons.Filled.AttachMoney" Href="/fixedincome">Fixed Income</MudNavLink>
+            <MudNavLink Icon="@Icons.Filled.MoneyOff" Href="/fixedcosts">Fixed Costs</MudNavLink>
+            <MudNavLink Icon="@Icons.Filled.KeyboardDoubleArrowUp" Href="/earnings">One-Time Earnings</MudNavLink>
+            <MudNavLink Icon="@Icons.Filled.KeyboardDoubleArrowDown" Href="/expenses">One-Time Expenses</MudNavLink>
+        </Authorized>
+    </AuthorizeView>
+
+    
     <MudNavGroup Title="Test Group" Expanded="true">
             <MudNavLink>Dashboard</MudNavLink>
             <MudNavLink >Earnings</MudNavLink>
             <MudNavLink Href="/">Expenses</MudNavLink>
     </MudNavGroup>
 </MudNavMenu>
+
+@code {
+    private async void Logout()
+    {
+        await LocalStorage.RemoveItemAsync("username");
+    }
+}
