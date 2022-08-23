@@ -1,4 +1,7 @@
 @page "/signin"
+@inject ILocalStorageService LocalStorage
+@inject NavigationManager Navigator
+@inject AuthenticationStateProvider AuthStateProvider
 
 <PageTitle>Sign up</PageTitle>
 
@@ -15,7 +18,7 @@
             <MudText Typo="Typo.h2" Align="Align.Left">Sign in</MudText>
             <MudTextField @bind-Value="@Username" Label="Username" Variant="Variant.Outlined" Required RequiredError="User name is required!"></MudTextField>
             <MudTextField @bind-Value="@Password" Label="Password" InputType="InputType.Password" Required RequiredError="Password is required!" Variant="Variant.Outlined"></MudTextField>
-            <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" Style="margin-top: 6px;">Sign in now</MudButton>
+            <MudButton @onclick="HandleLogin" Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" Style="margin-top: 6px;">Sign in now</MudButton>
             <MudNavLink Href="/signup">Don't have an accout? Sign up</MudNavLink>
         </MudContainer>
     </MudContainer>
@@ -63,5 +66,13 @@
 @code {
     public string? Password {get;set;}
     public string? Username {get;set;}
+
+    private async void HandleLogin() 
+    {
+        await LocalStorage.SetItemAsync<string>("username", Username!);
+        await AuthStateProvider.GetAuthenticationStateAsync();
+
+        Navigator.NavigateTo("");
+    }
 
 }
