@@ -17,8 +17,16 @@ namespace FinancesServer.Services
         {
             // Not authenticated (empty claims)
             var state = new AuthenticationState(new ClaimsPrincipal());
+            string username = "";
 
-            string username = await _localStorage.GetItemAsStringAsync("username");
+            // Catching and ignoring InvalidOperationException
+            // Exception is raised cause in pre-rendering phase we can not preform JavaScript interop calls (like getting data forom _localStorage)
+            // Also I can not use OnAfterRenderAsync lifecycle method or skip pre-rendering for paths that require authorization cause whole program requres authorization
+            try {
+                username = await _localStorage.GetItemAsStringAsync("username");
+            }
+            catch {}
+            
             if (!string.IsNullOrEmpty(username))
             {
                 var identity = new ClaimsIdentity(new[]
@@ -32,5 +40,6 @@ namespace FinancesServer.Services
             NotifyAuthenticationStateChanged(Task.FromResult(state));
             return state;
         }
+
     }
 }
