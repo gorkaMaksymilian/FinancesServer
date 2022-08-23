@@ -2,6 +2,8 @@
 @using System.ComponentModel.DataAnnotations
 @using System.Text.RegularExpressions
 @inject ILocalStorageService LocalStorage
+@inject NavigationManager Navigator
+@inject AuthenticationStateProvider AuthStateProvider
 
 <PageTitle>Sign in</PageTitle>
 
@@ -104,5 +106,8 @@
     private async void HandleLogin() 
     {
         await LocalStorage.SetItemAsync<string>("username", Username!);
+        await AuthStateProvider.GetAuthenticationStateAsync();
+
+        Navigator.NavigateTo("");
     }
 }
