@@ -16,9 +16,11 @@
     <MudContainer class="centered">
         <MudContainer class="auth-form-root">
             <MudText Typo="Typo.h2" Align="Align.Left">Sign in</MudText>
-            <MudTextField @bind-Value="@Username" Label="Username" Variant="Variant.Outlined" Required RequiredError="User name is required!"></MudTextField>
-            <MudTextField @bind-Value="@Password" Label="Password" InputType="InputType.Password" Required RequiredError="Password is required!" Variant="Variant.Outlined"></MudTextField>
-            <MudButton @onclick="HandleLogin" Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" Style="margin-top: 6px;">Sign in now</MudButton>
+            <MudForm @bind-IsValid="@success">
+                <MudTextField @bind-Value="@Username" Label="Username" Variant="Variant.Outlined" Required RequiredError="User name is required!"></MudTextField>
+                <MudTextField @bind-Value="@Password" Label="Password" InputType="InputType.Password" Required RequiredError="Password is required!" Variant="Variant.Outlined"></MudTextField>
+                <MudButton @onclick="HandleLogin" Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" Style="margin-top: 6px;" Disabled="@(!success)">Sign in now</MudButton>
+            </MudForm>
             <MudNavLink Href="/signup">Don't have an accout? Sign up</MudNavLink>
         </MudContainer>
     </MudContainer>
@@ -66,6 +68,7 @@
 @code {
     public string? Password {get;set;}
     public string? Username {get;set;}
+    bool success;
 
     private async void HandleLogin() 
     {
