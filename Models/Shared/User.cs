@@ -1,6 +1,4 @@
-using FinancesServer.Models.Shared;
-
-namespace FinancesServer.Models.SignUp
+namespace FinancesServer.Models.Shared
 {
     public class User
     {
