@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using MudBlazor.Services;
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
+using FinancesServer.Data.Users;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,6 +38,9 @@ builder.Services.AddScoped<IExpenseRepo, ExpenseRepo>();
 builder.Services.AddScoped<IFixedIncomeRepo, FixedIncomeRepo>();
 // Register repository for FixedCost objects
 builder.Services.AddScoped<IFixedCostRepo, FixedCostRepo>();
+
+// Register repository for User objects
+builder.Services.AddScoped<IUserRepo, UserRepo>();
 
 // Register AutoMapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
