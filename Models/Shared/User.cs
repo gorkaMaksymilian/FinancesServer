@@ -6,12 +6,16 @@ namespace FinancesServer.Models.Shared
     {
         [Key]
         public int Id { get; set; }
-        [Required]
+
+        [Required, MaxLength(30)]
         public string? Username { get; set; }
+
         [Required]
         public string? Email { get; set; }
-        [Required]
+
+        [Required, MinLength(8), MaxLength(30)]
         public string? Password {get; set;}
+        
         [Required]        
         public AuthLevelEnum AuthLevel { get; set; }
     }
