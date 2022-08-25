@@ -7,8 +7,8 @@ namespace FinancesServer.Data.Users
         Task SaveChanges();
         Task<User?> GetUserById(int id);
         Task<IEnumerable<User>> GetAllUsers();
-        Task CreateUser(User inc);
+        Task CreateUser(User user);
 
-        void DeleteUser(User inc);
+        void DeleteUser(User user);
     }
 }
