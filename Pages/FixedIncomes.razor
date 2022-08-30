@@ -7,13 +7,45 @@
 
 <PageTitle>Fixed income</PageTitle>
 
-<MudContainer MaxWidth="MaxWidth.Large">
-    <MudText Typo="Typo.h2" Align="Align.Center" GutterBottom="true">Update your fixed income:</MudText>
+<AuthorizeView>
+        <Authorized>
+            <MudContainer MaxWidth="MaxWidth.Large">
+                <MudText Typo="Typo.h2" Align="Align.Center" GutterBottom="true">Update your fixed income:</MudText>
 
-    <FixedForm Controller="fixedincome"/>
+                <FixedForm Controller="fixedincome"/>
 
-    <FixedDataGrid Data="@fixedIncomes"/>
-</MudContainer>
+                <FixedDataGrid Data="@fixedIncomes"/>
+            </MudContainer>
+        </Authorized>
+
+
+        <NotAuthorized>
+            <MudContainer class="fullscreen">
+                <MudText Typo="Typo.h3" Align="Align.Center" Color="Color.Primary" Class="centered">You need to sign in first.</MudText>
+            </MudContainer>
+        </NotAuthorized>
+</AuthorizeView>
+
+<style>
+    .fullscreen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        overflow: auto;
+    }
+
+    .centered {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+    }
+</style>
+
+
 
 
 @code {
