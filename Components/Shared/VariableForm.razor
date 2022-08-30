@@ -3,6 +3,7 @@
 @inject HttpClient Http
 @inject IReloadOtherComponentService ReloadOtherComponent
 @inject NavigationManager Navigator
+@inject ILocalStorageService LocalStorage
 
 @if (Controller is not null) {
     <MudGrid Justify="Justify.Center">
@@ -62,6 +63,8 @@
 
     public async Task HandleValidSubmit()
     {
+        var userId = await LocalStorage.GetItemAsync<int>("userId");
+
         if (Controller == "income")
         {
             IncomeCategoryEnum myCategory;
@@ -72,7 +75,8 @@
                 Date = date!.Value,
                 Description = subjectText,
                 Amount = nullableDecimal!.Value,
-                Category = myCategory
+                Category = myCategory,
+                UserId = userId
             };
             
             await Http.PostAsJsonAsync<Income>($"{Navigator.BaseUri}api/{Controller}", newIncome);
@@ -87,7 +91,8 @@
                 Date = date!.Value,
                 Description = subjectText,
                 Amount = nullableDecimal!.Value,
-                Category = myCategory
+                Category = myCategory,
+                UserId = userId
             };
             
             await Http.PostAsJsonAsync<Expense>($"{Navigator.BaseUri}api/{Controller}", newExpense);
