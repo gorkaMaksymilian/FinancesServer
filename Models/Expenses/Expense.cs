@@ -19,5 +19,8 @@ namespace FinancesServer.Models.Expenses
 
         [Required]
         public ExpenseCategoryEnum Category {get; set;}
+
+        [Required]
+        public int UserId {get;set;}
     }
 }

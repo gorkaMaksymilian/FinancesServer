@@ -19,5 +19,8 @@ namespace FinancesServer.Models.Earnings
 
         [Required]
         public IncomeCategoryEnum Category {get;set;}
+
+        [Required]
+        public int UserId {get;set;}
     }
 }
