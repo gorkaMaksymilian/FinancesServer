@@ -16,16 +16,15 @@
                 }
             }
 
-            @if (fixedIncomes is not null)
-            {
-                <MudContainer MaxWidth="MaxWidth.Large">
-                    <MudText Typo="Typo.h2" Align="Align.Center" GutterBottom="true">Update your fixed income:</MudText>
 
-                    <FixedForm Controller="fixedincome"/>
+            <MudContainer MaxWidth="MaxWidth.Large">
+                <MudText Typo="Typo.h2" Align="Align.Center" GutterBottom="true">Update your fixed income:</MudText>
 
-                    <FixedDataGrid Data="@fixedIncomes"/>
-                </MudContainer>
-            }
+                <FixedForm Controller="fixedincome"/>
+
+                <FixedDataGrid Data="@fixedIncomes"/>
+            </MudContainer>
+            
             
         </Authorized>
 

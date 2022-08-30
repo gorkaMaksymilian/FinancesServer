@@ -15,16 +15,15 @@
                     dataLoaded = true;
                 }
             }
-            @if (earnings is not null )
-            {
-                <MudContainer MaxWidth="MaxWidth.Large">
-                    <MudText Typo="Typo.h2" Align="Align.Center" GutterBottom="true">Update your earnings:</MudText>
 
-                    <VariableForm Controller="income"/>
+            <MudContainer MaxWidth="MaxWidth.Large">
+                <MudText Typo="Typo.h2" Align="Align.Center" GutterBottom="true">Update your earnings:</MudText>
 
-                    <VariableDataGrid Data=@earnings/>
-                </MudContainer>
-            }
+                <VariableForm Controller="income"/>
+
+                <VariableDataGrid Data=@earnings/>
+            </MudContainer>
+
         </Authorized>
 
 
