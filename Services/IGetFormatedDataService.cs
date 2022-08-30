@@ -1,4 +1,7 @@
 using FinancesServer.Models.Dashboard;
+using FinancesServer.Models.Earnings;
+using FinancesServer.Models.Expenses;
+using FinancesServer.Models.FixedCosts;
 using FinancesServer.Models.FixedIncomes;
 
 namespace FinancesServer.Services
@@ -12,8 +15,8 @@ namespace FinancesServer.Services
 
 
         Task<IEnumerable<FixedIncome>> GetFixedIncomesByUserId(int userId);
-        Task<IEnumerable<FixedIncome>> GetFixedCostsByUserId(int userId);
-        Task<IEnumerable<FixedIncome>> GetIncomesByUserId(int userId);
-        Task<IEnumerable<FixedIncome>> GetExpensesByUserId(int userId);
+        Task<IEnumerable<FixedCost>> GetFixedCostsByUserId(int userId);
+        Task<IEnumerable<Income>> GetIncomesByUserId(int userId);
+        Task<IEnumerable<Expense>> GetExpensesByUserId(int userId);
     }
 }
