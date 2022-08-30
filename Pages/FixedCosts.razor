@@ -4,6 +4,8 @@
 @inject NavigationManager Navigator
 @inject HttpClient Http
 @inject IReloadOtherComponentService ReloadOtherComponent
+@inject IGetFormatedDataService dataService
+@inject ILocalStorageService LocalStorage
 
 <PageTitle>Fixed costs</PageTitle>
 
@@ -57,7 +59,7 @@
 
 
 @code {
-    private List<FixedCost>? fixedCosts = new List<FixedCost>();
+    private IEnumerable<FixedCost>? fixedCosts;
     private bool dataLoaded = false;
     
     protected override void OnInitialized()
@@ -68,7 +70,8 @@
     
     private async void RefreshMe()
     {
-        fixedCosts = await Http.GetFromJsonAsync<List<FixedCost>>($"{Navigator.BaseUri}api/fixedcost");
+        var userId = await LocalStorage.GetItemAsync<int>("userId");
+        fixedCosts = await dataService.GetFixedCostsByUserId(userId);
         StateHasChanged();
     }
 }

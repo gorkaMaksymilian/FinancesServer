@@ -2,6 +2,8 @@
 @inject NavigationManager Navigator
 @inject HttpClient Http
 @inject IReloadOtherComponentService ReloadOtherComponent
+@inject IGetFormatedDataService dataService
+@inject ILocalStorageService LocalStorage
 @using FinancesServer.Components.Shared
 @using Models.Expenses
 
@@ -56,7 +58,7 @@
 
 
 @code {
-    private List<Expense>? expenses = new List<Expense>();
+    private IEnumerable<Expense>? expenses;
     private bool dataLoaded = false;
     
     protected override void OnInitialized()
@@ -66,7 +68,8 @@
 
     private async void RefreshMe()
     {
-        expenses = await Http.GetFromJsonAsync<List<Expense>>($"{Navigator.BaseUri}api/expense");
+        var userId = await LocalStorage.GetItemAsync<int>("userId");
+        expenses = await dataService.GetExpensesByUserId(userId);
         StateHasChanged();
     }
 }

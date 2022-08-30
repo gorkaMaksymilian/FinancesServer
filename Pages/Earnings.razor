@@ -2,6 +2,8 @@
 @inject NavigationManager Navigator
 @inject HttpClient Http
 @inject IReloadOtherComponentService ReloadOtherComponent
+@inject IGetFormatedDataService dataService
+@inject ILocalStorageService LocalStorage
 @using FinancesServer.Components.Shared
 @using Models.Earnings
 
@@ -57,7 +59,7 @@
 
 
 @code {
-    private List<Income>? earnings = new List<Income>();
+    private IEnumerable<Income>? earnings;
     private bool dataLoaded = false;
     
     protected override void OnInitialized()
@@ -67,7 +69,8 @@
 
     private async void RefreshMe()
     {
-        earnings = await Http.GetFromJsonAsync<List<Income>>($"{Navigator.BaseUri}api/income");
+        var userId = await LocalStorage.GetItemAsync<int>("userId");
+        earnings = await dataService.GetEarningsByUserId(userId);
         StateHasChanged();
     }
 }
