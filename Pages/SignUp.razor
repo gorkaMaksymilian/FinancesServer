@@ -1,11 +1,14 @@
 @page "/signup"
 @using System.ComponentModel.DataAnnotations
 @using System.Text.RegularExpressions
+@using Models.Shared
 @inject ILocalStorageService LocalStorage
 @inject NavigationManager Navigator
 @inject AuthenticationStateProvider AuthStateProvider
+@inject HttpClient Http
 
-<PageTitle>Sign in</PageTitle>
+
+<PageTitle>Sign up</PageTitle>
 
 <MudContainer class="split left">
     <MudContainer class="centered">
@@ -19,8 +22,8 @@
         <MudContainer class="auth-form-root">
             <MudText Typo="Typo.h2" Align="Align.Left">Create new account</MudText>
             <MudForm @bind-IsValid="@success">
-                <MudTextField @bind-Value="@Username" Label="Username"  Variant="Variant.Outlined" Required="true" RequiredError="User name is required!"/>
-                <MudTextField @bind-Value="@Email" Label="Email adress" Variant="Variant.Outlined" Required RequiredError="The email address is invalid"
+                <MudTextField @bind-Value="@username" Label="username"  Variant="Variant.Outlined" Required="true" RequiredError="User name is required!"/>
+                <MudTextField @bind-Value="@email" Label="email adress" Variant="Variant.Outlined" Required RequiredError="The email address is invalid"
                             Validation="@(new EmailAddressAttribute() {ErrorMessage = "The email address is invalid"})"/>
                 <MudTextField @ref="PasswordField" T="string" Label="Password" Variant="Variant.Outlined" InputType="InputType.Password" Required RequiredError="Password is required!" 
                             Validation="@(new Func<string, IEnumerable<string>>(PasswordStrength))" HelperText="Choose a strong password"/>
@@ -74,8 +77,8 @@
 </style>
 
 @code {
-    public string? Email {get;set;}
-    public string? Username {get;set;}
+    public string? email {get;set;}
+    public string? username {get;set;}
     MudTextField<string>? PasswordField;
     bool success;
 
@@ -105,8 +108,18 @@
 
     private async void HandleSignUp() 
     {
-        await LocalStorage.SetItemAsync<string>("username", Username!);
+        User newUser = new User() {
+            Username = username,
+            Email = email,
+            Password = PasswordField!.Value,
+            AuthLevel = AuthLevelEnum.User
+        };
+
+        await LocalStorage.SetItemAsync<string>("username", username!);
+        await LocalStorage.SetItemAsync<AuthLevelEnum>("authLevel", newUser.AuthLevel);
         await AuthStateProvider.GetAuthenticationStateAsync();
+
+        await Http.PostAsJsonAsync<User>($"{Navigator.BaseUri}api/user", newUser);
 
         Navigator.NavigateTo("");
     }
