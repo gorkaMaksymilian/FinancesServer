@@ -18,5 +18,8 @@ namespace FinancesServer.DTOs.FixedIncomes
 
         [Required]
         public MonthEnum MonthOfFirstPayment {get;set;} 
+
+        [Required]
+        public int UserId {get;set;}
     }
 }

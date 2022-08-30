@@ -13,5 +13,7 @@ namespace FinancesServer.DTOs.Expenses
         public decimal Amount {get;set;}        
 
         public ExpenseCategoryEnum Category {get; set;}
+
+        public int UserId {get;set;}
     }
 }

@@ -2,39 +2,78 @@
 @using FinancesServer.Components.Dashboard
 @using Models.Dashboard
 @inject IGetFormatedDataService dataService
+@inject ILocalStorageService LocalStorage
 
 <PageTitle>Dashboard</PageTitle>
 
+<AuthorizeView>
+        <Authorized>
+            @{
+                if (dataLoaded == false){
+                    LoadData();
+                    dataLoaded = true;
+                }
+            }
+            @if (currentMonthEarnings is not null && currentMonthExpenses is not null && lastMonthEarnings is not null && lastMonthExpenses is not null &&
+                 fixedCosts is not null && fixedIncome is not null) 
+            {
+                <MudGrid Justify="Justify.SpaceBetween" Style="margin-top: 12px">
+                    <MudItem xs="4">
+                        <DataCard Controller="@ControllerEnum.Earnings" SummedAmount="@summedCurrentMonthEarnings" PercentageChange="@earningsPercentageChange"/>
+                    </MudItem>
+                    <MudItem xs="4">
+                        <DataCard Controller="@ControllerEnum.Profit" SummedAmount="@summedCurrentMonthProfit" PercentageChange="@profitPercentageChange"/>
+                    </MudItem>
+                    <MudItem xs="4">
+                        <DataCard Controller="@ControllerEnum.Expenses" SummedAmount="@summedCurrentMonthExpenses" PercentageChange="@expensesPercentageChange"/>
+                    </MudItem>
 
-@if (currentMonthEarnings is not null && currentMonthExpenses is not null && lastMonthEarnings is not null && lastMonthExpenses is not null &&
-     fixedCosts is not null && fixedIncome is not null) 
-{
-    <MudGrid Justify="Justify.SpaceBetween" Style="margin-top: 12px">
-        <MudItem xs="4">
-            <DataCard Controller="@ControllerEnum.Earnings" SummedAmount="@summedCurrentMonthEarnings" PercentageChange="@earningsPercentageChange"/>
-        </MudItem>
-        <MudItem xs="4">
-            <DataCard Controller="@ControllerEnum.Profit" SummedAmount="@summedCurrentMonthProfit" PercentageChange="@profitPercentageChange"/>
-        </MudItem>
-        <MudItem xs="4">
-            <DataCard Controller="@ControllerEnum.Expenses" SummedAmount="@summedCurrentMonthExpenses" PercentageChange="@expensesPercentageChange"/>
-        </MudItem>
+                    <MudItem xs="6">
+                        <DonutCard Controller="@ControllerEnum.Earnings" AmountArray="@currentMonthEarningsAmounts" Labels="@currentMonthEarningsCategories"/>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <DonutCard Controller="@ControllerEnum.Expenses" AmountArray="@currentMonthExpensesAmounts" Labels="@currentMonthExpensesCategories"/>
+                    </MudItem>
 
-        <MudItem xs="6">
-            <DonutCard Controller="@ControllerEnum.Earnings" AmountArray="@currentMonthEarningsAmounts" Labels="@currentMonthEarningsCategories"/>
-        </MudItem>
-        <MudItem xs="6">
-            <DonutCard Controller="@ControllerEnum.Expenses" AmountArray="@currentMonthExpensesAmounts" Labels="@currentMonthExpensesCategories"/>
-        </MudItem>
+                    <MudItem xs="6">
+                        <FixedDataCard Controller="@ControllerEnum.FixedIncome" SummedAmount="@summedFixedIncome"/>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <FixedDataCard Controller="@ControllerEnum.FixedCosts" SummedAmount="@summedFixedCosts"/>
+                    </MudItem>
+                </MudGrid>
+            }
+        </Authorized>
 
-        <MudItem xs="6">
-            <FixedDataCard Controller="@ControllerEnum.FixedIncome" SummedAmount="@summedFixedIncome"/>
-        </MudItem>
-        <MudItem xs="6">
-            <FixedDataCard Controller="@ControllerEnum.FixedCosts" SummedAmount="@summedFixedCosts"/>
-        </MudItem>
-    </MudGrid>
-}
+
+        <NotAuthorized>
+            <MudContainer class="fullscreen">
+                <MudText Typo="Typo.h3" Align="Align.Center" Color="Color.Primary" Class="centered">You need to sign in first.</MudText>
+            </MudContainer>
+        </NotAuthorized>
+</AuthorizeView>
+
+<style>
+    .fullscreen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        overflow: auto;
+    }
+
+    .centered {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+    }
+</style>
+
+
+
 
 
 
@@ -70,17 +109,21 @@
     string[]? currentMonthExpensesCategories;
     double[]? currentMonthExpensesAmounts;
 
+    private bool dataLoaded = false;
 
-    protected override async Task OnInitializedAsync()
+
+    protected async void LoadData()
     {
         // Get all data needed
-        currentMonthEarnings = await dataService.GetMonthlyEarnings(currentDate.Month, currentDate.Year);
-        currentMonthExpenses = await dataService.GetMonthlyExpenses(currentDate.Month, currentDate.Year);
-        lastMonthEarnings = await dataService.GetMonthlyEarnings(currentDate.AddMonths(-1).Month, currentDate.Year);
-        lastMonthExpenses = await dataService.GetMonthlyExpenses(currentDate.AddMonths(-1).Month, currentDate.Year);
+        var userId = await LocalStorage.GetItemAsync<int>("userId");
 
-        fixedCosts = await dataService.GetFixedCosts(currentDate.Month);
-        fixedIncome = await dataService.GetFixedIncomes(currentDate.Month);
+        currentMonthEarnings = await dataService.GetMonthlyEarnings(currentDate.Month, currentDate.Year, userId);
+        currentMonthExpenses = await dataService.GetMonthlyExpenses(currentDate.Month, currentDate.Year, userId);
+        lastMonthEarnings = await dataService.GetMonthlyEarnings(currentDate.AddMonths(-1).Month, currentDate.Year, userId);
+        lastMonthExpenses = await dataService.GetMonthlyExpenses(currentDate.AddMonths(-1).Month, currentDate.Year, userId);
+
+        fixedCosts = await dataService.GetFixedCosts(currentDate.Month, userId);
+        fixedIncome = await dataService.GetFixedIncomes(currentDate.Month, userId);
 
         if (currentMonthEarnings is not null && currentMonthExpenses is not null && lastMonthEarnings is not null && lastMonthExpenses is not null)
         {
@@ -112,6 +155,8 @@
 
         summedFixedCosts = GetSummedAmount(fixedCosts);
         summedFixedIncome = GetSummedAmount(fixedIncome);
+
+        StateHasChanged();
     }
 
     protected decimal GetSummedAmount(IEnumerable<MonthlyItem> monthlyItems)

@@ -1,29 +1,65 @@
 @page "/signup"
+@using System.ComponentModel.DataAnnotations
+@using System.Text.RegularExpressions
+@using Models.Shared
+@inject ILocalStorageService LocalStorage
+@inject NavigationManager Navigator
+@inject AuthenticationStateProvider AuthStateProvider
+@inject HttpClient Http
+
 
 <PageTitle>Sign up</PageTitle>
 
-<MudContainer class="split left">
-    <MudContainer class="centered">
-        <MudText Typo="Typo.h4" Align="Align.Center" Color="Color.Primary">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis auctor elit vitae ex pulvinar dictum.</MudText>
-        <MudText Typo="Typo.subtitle1" Align="Align.Center" Color="Color.Primary">Nunc sit amet sagittis libero.</MudText>
-    </MudContainer>
-</MudContainer>
+<AuthorizeView>
+        <Authorized>
+            <MudContainer class="fullscreen">
+                <MudText Typo="Typo.h3" Align="Align.Center" Color="Color.Primary" Class="centered">You are already signed in.</MudText>
+            </MudContainer>
+        </Authorized>
 
-<MudContainer class="split right">
-    <MudContainer class="centered">
-        <MudContainer class="auth-form-root">
-            <MudText Typo="Typo.h2" Align="Align.Left">Create new account</MudText>
-            <MudTextField @bind-Value="@FirstName" Label="First name" Variant="Variant.Outlined"></MudTextField>
-            <MudTextField @bind-Value="@LastName" Label="Last name" Variant="Variant.Outlined"></MudTextField>
-            <MudTextField @bind-Value="@Email" Label="Email adress" Variant="Variant.Outlined"></MudTextField>
-            <MudTextField @bind-Value="@Password" Label="Password" Variant="Variant.Outlined"></MudTextField>
-            <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" Style="margin-top: 6px;">Sign up now</MudButton>
-            <MudNavLink Href="/signin">Have an account? Sign in</MudNavLink>
-        </MudContainer>
-    </MudContainer>
-</MudContainer>
+
+        <NotAuthorized>
+            <MudContainer class="split left">
+                <MudContainer class="centered">
+                    <MudText Typo="Typo.h4" Align="Align.Center" Color="Color.Primary">@titleText</MudText>
+                    <MudText Typo="Typo.subtitle1" Align="Align.Center" Color="Color.Primary">@subtitleText</MudText>
+                </MudContainer>
+            </MudContainer>
+
+            <MudContainer class="split right">
+                <MudContainer class="centered">
+                    <MudContainer class="auth-form-root">
+                        <MudText Typo="Typo.h2" Align="Align.Left">Create new account</MudText>
+                        <MudForm @bind-IsValid="@success">
+                            <MudTextField @bind-Value="@username" Label="Username"  Variant="Variant.Outlined" Required="true" RequiredError="User name is required!"/>
+                            <MudTextField @bind-Value="@email" Label="Email adress" Variant="Variant.Outlined" Required RequiredError="The email address is invalid"
+                                        Validation="@(new EmailAddressAttribute() {ErrorMessage = "The email address is invalid"})"/>
+                            <MudTextField @ref="PasswordField" T="string" Label="Password" Variant="Variant.Outlined" InputType="InputType.Password" Required RequiredError="Password is required!" 
+                                        Validation="@(new Func<string, IEnumerable<string>>(PasswordStrength))" HelperText="Choose a strong password"/>
+                            <MudTextField T="string" Label="Repeat password" Variant="Variant.Outlined" InputType="InputType.Password" 
+                                        Validation="@(new Func<string, string?>(PasswordMatch))" HelperText="Repeat the password"/>
+
+                            <MudButton @onclick="HandleSignUp" Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" Style="margin-top: 6px;" Disabled="@(!success)">Sign up now</MudButton>
+                        </MudForm>
+                        <MudNavLink Href="/signin">Have an account? Sign in</MudNavLink>
+                    </MudContainer>
+                </MudContainer>
+            </MudContainer>
+        </NotAuthorized>
+</AuthorizeView>
+
+
 
 <style>
+    .fullscreen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        overflow: auto;
+    }
+
     .split {
         height: 100%;
         width: 50%;
@@ -63,9 +99,73 @@
 </style>
 
 @code {
-    public string? Email {get;set;}
-    public string? Password {get;set;}
-    public string? FirstName {get;set;}
-    public string? LastName {get;set;}
+    public string? email {get;set;}
+    public string? username {get;set;}
+    MudTextField<string>? PasswordField;
+    bool success;
 
+    public string titleText = "Create new account today and get full access (no strings attached this website is completely free to use)";
+    public string subtitleText = "Your own income/costs dashboard is one step away";
+
+    private IEnumerable<string> PasswordStrength(string pw)
+    {
+        if (string.IsNullOrWhiteSpace(pw))
+        {
+            yield return "Password is required!";
+            yield break;
+        }
+        if (pw.Length < 8)
+            yield return "Password must be at least of length 8";
+        if (pw.Length > 30)
+            yield return "Password length must 30 or less characters";
+        if (!Regex.IsMatch(pw, @"[A-Z]"))
+            yield return "Password must contain at least one capital letter";
+        if (!Regex.IsMatch(pw, @"[a-z]"))
+            yield return "Password must contain at least one lowercase letter";
+        if (!Regex.IsMatch(pw, @"[0-9]"))
+            yield return "Password must contain at least one digit";
+    }
+
+    private string? PasswordMatch(string arg)
+    {
+        if (PasswordField!.Value != arg)
+            return "Passwords don't match";
+        return null;
+    }
+
+    private async void HandleSignUp() 
+    {
+        // Check if username or login is already used
+        var users = await Http.GetFromJsonAsync<List<User>>($"{Navigator.BaseUri}api/user");
+        var user = users!.Where(usr => usr.Username == username || usr.Email == email).FirstOrDefault();
+
+        if (user != null) 
+        {
+            if (user.Username == username)
+                titleText = "We are sorry but this username is already in use";
+            else
+                titleText = "We are sorry but this email is already in use";
+
+            StateHasChanged();
+        }
+        else 
+        {
+            User newUser = new User() {
+            Username = username,
+            Email = email,
+            Password = PasswordField!.Value,
+            AuthLevel = AuthLevelEnum.User
+            };
+
+            await LocalStorage.SetItemAsync<string>("username", username!);
+            await LocalStorage.SetItemAsync<AuthLevelEnum>("authLevel", newUser.AuthLevel);
+            await LocalStorage.SetItemAsync<int>("userId", newUser.Id);
+            await AuthStateProvider.GetAuthenticationStateAsync();
+
+            await Http.PostAsJsonAsync<User>($"{Navigator.BaseUri}api/user", newUser);
+
+            Navigator.NavigateTo("");
+        }
+        
+    }
 }

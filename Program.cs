@@ -7,7 +7,9 @@ using FinancesServer.Services;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using MudBlazor.Services;
-
+using Blazored.LocalStorage;
+using Microsoft.AspNetCore.Components.Authorization;
+using FinancesServer.Data.Users;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,6 +39,9 @@ builder.Services.AddScoped<IFixedIncomeRepo, FixedIncomeRepo>();
 // Register repository for FixedCost objects
 builder.Services.AddScoped<IFixedCostRepo, FixedCostRepo>();
 
+// Register repository for User objects
+builder.Services.AddScoped<IUserRepo, UserRepo>();
+
 // Register AutoMapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -49,6 +54,12 @@ builder.Services.AddScoped<IReloadOtherComponentService, ReloadOtherComponentSer
 // Register Service that gets formated data from DB
 builder.Services.AddScoped<IGetFormatedDataService,GetFormatedDataService>();
 
+// Register LocalStorage
+builder.Services.AddBlazoredLocalStorage();
+
+// Register custom AuthenticationStateProvider
+builder.Services.AddAuthenticationCore();
+builder.Services.AddScoped<AuthenticationStateProvider, AuthStateProvider>();
 
 var app = builder.Build();
 

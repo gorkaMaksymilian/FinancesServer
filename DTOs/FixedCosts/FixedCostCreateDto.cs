@@ -17,6 +17,9 @@ namespace FinancesServer.DTOs.FixedCosts
         public FixedCostCategoryEnum Category { get; set; }
 
         [Required]
-        public MonthEnum MonthOfFirstPayment {get;set;} 
+        public MonthEnum MonthOfFirstPayment {get;set;}
+        
+        [Required]
+        public int UserId {get;set;}
     }
 }

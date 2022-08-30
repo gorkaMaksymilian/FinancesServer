@@ -2,6 +2,7 @@ using FinancesServer.Models.Earnings;
 using FinancesServer.Models.Expenses;
 using FinancesServer.Models.FixedCosts;
 using FinancesServer.Models.FixedIncomes;
+using FinancesServer.Models.Shared;
 using Microsoft.EntityFrameworkCore;
 
 namespace FinancesServer.Data
@@ -18,6 +19,8 @@ namespace FinancesServer.Data
 
         public DbSet<FixedIncome> FixedIncomes => Set<FixedIncome>();
         public DbSet<FixedCost> FixedCosts => Set<FixedCost>();
+
+        public DbSet<User> Users => Set<User>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

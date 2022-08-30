@@ -46,9 +46,12 @@ Ready:
 * FixedIncome and FixedCosts pages. (CRUD support)
 * Basic validation and exception handling for custom components.
 * Dashboard page.
+* Registration/Login pages. 
+* Authentication and authorization.
+* Individual data for every user
 
 To-do list:
-* Registration/Login pages. (rebuild database once again to support this feature)
+* Admin page (display all users etc.)
 
 
 

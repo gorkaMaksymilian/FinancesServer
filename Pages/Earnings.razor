@@ -2,33 +2,75 @@
 @inject NavigationManager Navigator
 @inject HttpClient Http
 @inject IReloadOtherComponentService ReloadOtherComponent
+@inject IGetFormatedDataService dataService
+@inject ILocalStorageService LocalStorage
 @using FinancesServer.Components.Shared
 @using Models.Earnings
 
 <PageTitle>Earnings</PageTitle>
 
-<MudContainer MaxWidth="MaxWidth.Large">
-    <MudText Typo="Typo.h2" Align="Align.Center" GutterBottom="true">Update your earnings:</MudText>
+<AuthorizeView>
+        <Authorized>
+            @{
+                if (dataLoaded == false){
+                    RefreshMe();
+                    dataLoaded = true;
+                }
+            }
 
-    <VariableForm Controller="income"/>
+            <MudContainer MaxWidth="MaxWidth.Large">
+                <MudText Typo="Typo.h2" Align="Align.Center" GutterBottom="true">Update your earnings:</MudText>
 
-    <VariableDataGrid Data=@earnings/>
-</MudContainer>
+                <VariableForm Controller="income"/>
+
+                <VariableDataGrid Data=@earnings/>
+            </MudContainer>
+
+        </Authorized>
+
+
+        <NotAuthorized>
+            <MudContainer class="fullscreen">
+                <MudText Typo="Typo.h3" Align="Align.Center" Color="Color.Primary" Class="centered">You need to sign in first.</MudText>
+            </MudContainer>
+        </NotAuthorized>
+</AuthorizeView>
+
+<style>
+    .fullscreen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        overflow: auto;
+    }
+
+    .centered {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+    }
+</style>
+
+
 
 
 @code {
-    private List<Income>? earnings = new List<Income>();
-
-    protected async override Task OnInitializedAsync()
+    private IEnumerable<Income>? earnings;
+    private bool dataLoaded = false;
+    
+    protected override void OnInitialized()
     {
         ReloadOtherComponent.RefreshRequested += RefreshMe;
-        earnings = await Http.GetFromJsonAsync<List<Income>>($"{Navigator.BaseUri}api/income");
-        StateHasChanged();
     }
 
     private async void RefreshMe()
     {
-        earnings = await Http.GetFromJsonAsync<List<Income>>($"{Navigator.BaseUri}api/income");
+        var userId = await LocalStorage.GetItemAsync<int>("userId");
+        earnings = await dataService.GetEarningsByUserId(userId);
         StateHasChanged();
     }
 }

@@ -2,32 +2,74 @@
 @inject NavigationManager Navigator
 @inject HttpClient Http
 @inject IReloadOtherComponentService ReloadOtherComponent
+@inject IGetFormatedDataService dataService
+@inject ILocalStorageService LocalStorage
 @using FinancesServer.Components.Shared
 @using Models.Expenses
 
 <PageTitle>Expenses</PageTitle>
 
-<MudContainer MaxWidth="MaxWidth.Large">
-    <MudText Typo="Typo.h2" Align="Align.Center" GutterBottom="true">Update your expenses:</MudText>
+<AuthorizeView>
+        <Authorized>
+            @{
+                if (dataLoaded == false){
+                    RefreshMe();
+                    dataLoaded = true;
+                }
+            }
 
-    <VariableForm Controller="expense"/>
+            <MudContainer MaxWidth="MaxWidth.Large">
+                <MudText Typo="Typo.h2" Align="Align.Center" GutterBottom="true">Update your expenses:</MudText>
 
-    <VariableDataGrid Data=@expenses/>
-</MudContainer>
+                <VariableForm Controller="expense"/>
+
+                <VariableDataGrid Data=@expenses/>
+            </MudContainer>
+            
+        </Authorized>
+
+
+        <NotAuthorized>
+            <MudContainer class="fullscreen">
+                <MudText Typo="Typo.h3" Align="Align.Center" Color="Color.Primary" Class="centered">You need to sign in first.</MudText>
+            </MudContainer>
+        </NotAuthorized>
+</AuthorizeView>
+
+<style>
+    .fullscreen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        overflow: auto;
+    }
+
+    .centered {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+    }
+</style>
+
+
 
 @code {
-    private List<Expense>? expenses = new List<Expense>();
-
-    protected async override Task OnInitializedAsync()
+    private IEnumerable<Expense>? expenses;
+    private bool dataLoaded = false;
+    
+    protected override void OnInitialized()
     {
         ReloadOtherComponent.RefreshRequested += RefreshMe;
-        expenses = await Http.GetFromJsonAsync<List<Expense>>($"{Navigator.BaseUri}api/expense");
-        StateHasChanged();
     }
 
     private async void RefreshMe()
     {
-        expenses = await Http.GetFromJsonAsync<List<Expense>>($"{Navigator.BaseUri}api/expense");
+        var userId = await LocalStorage.GetItemAsync<int>("userId");
+        expenses = await dataService.GetExpensesByUserId(userId);
         StateHasChanged();
     }
 }

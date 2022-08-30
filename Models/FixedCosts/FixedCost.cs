@@ -20,5 +20,8 @@ namespace FinancesServer.Models.FixedCosts
 
         [Required]
         public MonthEnum MonthOfFirstPayment {get;set;} 
+
+        [Required]
+        public int UserId {get;set;}
     }
 }

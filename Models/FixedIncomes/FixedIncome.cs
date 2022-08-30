@@ -19,6 +19,9 @@ namespace FinancesServer.Models.FixedIncomes
         public FixedIncomeCategoryEnum Category { get; set; }
 
         [Required]
-        public MonthEnum MonthOfFirstPayment {get;set;} 
+        public MonthEnum MonthOfFirstPayment {get;set;}
+        
+        [Required]
+        public int UserId {get;set;}
     }
 }

@@ -13,5 +13,7 @@ namespace FinancesServer.DTOs.Earnings
         public decimal Amount {get;set;}        
 
         public IncomeCategoryEnum Category {get; set;}
+
+        public int UserId {get;set;}
     }
 }
