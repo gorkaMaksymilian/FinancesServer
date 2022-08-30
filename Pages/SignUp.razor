@@ -22,12 +22,12 @@
         <MudContainer class="auth-form-root">
             <MudText Typo="Typo.h2" Align="Align.Left">Create new account</MudText>
             <MudForm @bind-IsValid="@success">
-                <MudTextField @bind-Value="@username" Label="username"  Variant="Variant.Outlined" Required="true" RequiredError="User name is required!"/>
-                <MudTextField @bind-Value="@email" Label="email adress" Variant="Variant.Outlined" Required RequiredError="The email address is invalid"
+                <MudTextField @bind-Value="@username" Label="Username"  Variant="Variant.Outlined" Required="true" RequiredError="User name is required!"/>
+                <MudTextField @bind-Value="@email" Label="Email adress" Variant="Variant.Outlined" Required RequiredError="The email address is invalid"
                             Validation="@(new EmailAddressAttribute() {ErrorMessage = "The email address is invalid"})"/>
                 <MudTextField @ref="PasswordField" T="string" Label="Password" Variant="Variant.Outlined" InputType="InputType.Password" Required RequiredError="Password is required!" 
                             Validation="@(new Func<string, IEnumerable<string>>(PasswordStrength))" HelperText="Choose a strong password"/>
-                <MudTextField T="string" Label="Password" Variant="Variant.Outlined" InputType="InputType.Password" 
+                <MudTextField T="string" Label="Repeat password" Variant="Variant.Outlined" InputType="InputType.Password" 
                               Validation="@(new Func<string, string?>(PasswordMatch))" HelperText="Repeat the password"/>
 
                 <MudButton @onclick="HandleSignUp" Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" Style="margin-top: 6px;" Disabled="@(!success)">Sign up now</MudButton>
