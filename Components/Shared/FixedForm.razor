@@ -74,7 +74,6 @@
         MonthEnum myMonth;
         Enum.TryParse<MonthEnum>(currentMonth, true, out myMonth);
         var userId = await LocalStorage.GetItemAsync<int>("userId");
-        Console.WriteLine(userId);
 
         if (Controller == "fixedincome")
         {
