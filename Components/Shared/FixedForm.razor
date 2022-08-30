@@ -4,6 +4,7 @@
 @inject HttpClient Http
 @inject IReloadOtherComponentService ReloadOtherComponent
 @inject NavigationManager Navigator
+@inject ILocalStorageService LocalStorage
 
 @if (Controller is not null) {
     <MudGrid Justify="Justify.Center">
@@ -72,7 +73,8 @@
     {
         MonthEnum myMonth;
         Enum.TryParse<MonthEnum>(currentMonth, true, out myMonth);
-
+        var userId = await LocalStorage.GetItemAsync<int>("userId");
+        Console.WriteLine(userId);
 
         if (Controller == "fixedincome")
         {
@@ -83,7 +85,8 @@
                 Description = description,
                 Amount = nullableDecimal!.Value,
                 Category = myCategory,
-                MonthOfFirstPayment = myMonth
+                MonthOfFirstPayment = myMonth,
+                UserId = userId
             };
             
             await Http.PostAsJsonAsync<FixedIncome>($"{Navigator.BaseUri}api/{Controller}", newFixedIncome);
@@ -98,7 +101,8 @@
                 Description = description,
                 Amount = nullableDecimal!.Value,
                 Category = myCategory,
-                MonthOfFirstPayment = myMonth
+                MonthOfFirstPayment = myMonth,
+                UserId = userId
             };
             
             await Http.PostAsJsonAsync<FixedCost>($"{Navigator.BaseUri}api/{Controller}", newFixedCost);
