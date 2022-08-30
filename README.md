@@ -48,9 +48,9 @@ Ready:
 * Dashboard page.
 * Registration/Login pages. 
 * Authentication and authorization.
+* Individual data for every user
 
 To-do list:
-* Own income/cost etc. for every user
 * Admin page (display all users etc.)
 
 
