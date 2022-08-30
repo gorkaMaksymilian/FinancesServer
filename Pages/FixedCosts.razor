@@ -9,6 +9,12 @@
 
 <AuthorizeView>
         <Authorized>
+            @{
+                if (dataLoaded == false){
+                    RefreshMe();
+                    dataLoaded = true;
+                }
+            }
             <MudContainer MaxWidth="MaxWidth.Large">
                 <MudText Typo="Typo.h2" Align="Align.Center" GutterBottom="true">Update your fixed cost:</MudText>
 
@@ -25,6 +31,8 @@
             </MudContainer>
         </NotAuthorized>
 </AuthorizeView>
+
+
 
 <style>
     .fullscreen {
@@ -50,17 +58,18 @@
 
 @code {
     private List<FixedCost>? fixedCosts = new List<FixedCost>();
-
-    protected async override Task OnInitializedAsync()
+    private bool dataLoaded = false;
+    
+    protected override void OnInitialized()
     {
         ReloadOtherComponent.RefreshRequested += RefreshMe;
-        fixedCosts = await Http.GetFromJsonAsync<List<FixedCost>>($"{Navigator.BaseUri}api/fixedcost");
-        StateHasChanged();
     }
 
+    
     private async void RefreshMe()
     {
         fixedCosts = await Http.GetFromJsonAsync<List<FixedCost>>($"{Navigator.BaseUri}api/fixedcost");
         StateHasChanged();
     }
 }
+
