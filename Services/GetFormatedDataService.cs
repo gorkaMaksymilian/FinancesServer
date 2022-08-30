@@ -18,6 +18,12 @@ namespace FinancesServer.Services
             _http = http;
         }
 
+        public async Task<IEnumerable<Expense>> GetExpensesByUserId(int userId)
+        {
+            List<Expense>? data = await _http.GetFromJsonAsync<List<Expense>>($"{_host}api/expense");
+            return data!.Where(Exp => Exp.UserId == userId);
+        }
+
         public async Task<IEnumerable<MonthlyItem>> GetFixedCosts(int month, int userId)
         {
             List<FixedCost>? data = await _http.GetFromJsonAsync<List<FixedCost>>($"{_host}api/fixedcost");
@@ -43,6 +49,12 @@ namespace FinancesServer.Services
                 throw new NullReferenceException();  
         }
 
+        public async Task<IEnumerable<FixedCost>> GetFixedCostsByUserId(int userId)
+        {
+            List<FixedCost>? data = await _http.GetFromJsonAsync<List<FixedCost>>($"{_host}api/fixedcost");
+            return data!.Where(fExp => fExp.UserId == userId);
+        }
+
         public async Task<IEnumerable<MonthlyItem>> GetFixedIncomes(int month, int userId)
         {
             var data = await _http.GetFromJsonAsync<List<FixedIncome>>($"{_host}api/fixedincome");
@@ -52,6 +64,18 @@ namespace FinancesServer.Services
                         .Select(fInc => new MonthlyItem(fInc.Sum(item => item.Amount), fInc.Key.ToString()));
 
             
+        }
+
+        public async Task<IEnumerable<FixedIncome>> GetFixedIncomesByUserId(int userId)
+        {
+            List<FixedIncome>? data = await _http.GetFromJsonAsync<List<FixedIncome>>($"{_host}api/fixedcost");
+            return data!.Where(fInc => fInc.UserId == userId);
+        }
+
+        public async Task<IEnumerable<Income>> GetIncomesByUserId(int userId)
+        {
+            List<Income>? data = await _http.GetFromJsonAsync<List<Income>>($"{_host}api/fixedcost");
+            return data!.Where(Inc => Inc.UserId == userId);
         }
 
         public async Task<IEnumerable<MonthlyItem>> GetMonthlyEarnings(int month, int year, int userId)
