@@ -4,6 +4,8 @@
 @inject NavigationManager Navigator
 @inject HttpClient Http
 @inject IReloadOtherComponentService ReloadOtherComponent
+@inject IGetFormatedDataService dataService
+@inject ILocalStorageService LocalStorage
 
 <PageTitle>Fixed income</PageTitle>
 
@@ -59,7 +61,7 @@
 
 
 @code {
-    private List<FixedIncome>? fixedIncomes = new List<FixedIncome>();
+    private IEnumerable<FixedIncome>? fixedIncomes;
     private bool dataLoaded = false;
 
     protected override void OnInitialized()
@@ -69,7 +71,8 @@
 
     private async void RefreshMe()
     {
-        fixedIncomes = await Http.GetFromJsonAsync<List<FixedIncome>>($"{Navigator.BaseUri}api/fixedincome");
+        var userId = await LocalStorage.GetItemAsync<int>("userId");
+        fixedIncomes = await dataService.GetFixedIncomesByUserId(userId);
         StateHasChanged();
     }
 }
