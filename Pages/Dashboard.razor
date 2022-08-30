@@ -2,6 +2,7 @@
 @using FinancesServer.Components.Dashboard
 @using Models.Dashboard
 @inject IGetFormatedDataService dataService
+@inject ILocalStorageService LocalStorage
 
 <PageTitle>Dashboard</PageTitle>
 
@@ -114,13 +115,15 @@
     protected async void LoadData()
     {
         // Get all data needed
-        currentMonthEarnings = await dataService.GetMonthlyEarnings(currentDate.Month, currentDate.Year);
-        currentMonthExpenses = await dataService.GetMonthlyExpenses(currentDate.Month, currentDate.Year);
-        lastMonthEarnings = await dataService.GetMonthlyEarnings(currentDate.AddMonths(-1).Month, currentDate.Year);
-        lastMonthExpenses = await dataService.GetMonthlyExpenses(currentDate.AddMonths(-1).Month, currentDate.Year);
+        var userId = await LocalStorage.GetItemAsync<int>("userId");
 
-        fixedCosts = await dataService.GetFixedCosts(currentDate.Month);
-        fixedIncome = await dataService.GetFixedIncomes(currentDate.Month);
+        currentMonthEarnings = await dataService.GetMonthlyEarnings(currentDate.Month, currentDate.Year, userId);
+        currentMonthExpenses = await dataService.GetMonthlyExpenses(currentDate.Month, currentDate.Year, userId);
+        lastMonthEarnings = await dataService.GetMonthlyEarnings(currentDate.AddMonths(-1).Month, currentDate.Year, userId);
+        lastMonthExpenses = await dataService.GetMonthlyExpenses(currentDate.AddMonths(-1).Month, currentDate.Year, userId);
+
+        fixedCosts = await dataService.GetFixedCosts(currentDate.Month, userId);
+        fixedIncome = await dataService.GetFixedIncomes(currentDate.Month, userId);
 
         if (currentMonthEarnings is not null && currentMonthExpenses is not null && lastMonthEarnings is not null && lastMonthExpenses is not null)
         {
