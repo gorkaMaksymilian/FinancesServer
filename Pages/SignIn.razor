@@ -1,14 +1,16 @@
 @page "/signin"
+@using Models.Shared
 @inject ILocalStorageService LocalStorage
 @inject NavigationManager Navigator
 @inject AuthenticationStateProvider AuthStateProvider
+@inject HttpClient Http
 
 <PageTitle>Sign in</PageTitle>
 
 <MudContainer class="split left">
     <MudContainer class="centered">
-        <MudText Typo="Typo.h4" Align="Align.Center" Color="Color.Primary">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis auctor elit vitae ex pulvinar dictum.</MudText>
-        <MudText Typo="Typo.subtitle1" Align="Align.Center" Color="Color.Primary">Nunc sit amet sagittis libero.</MudText>
+        <MudText Typo="Typo.h4" Align="Align.Center" Color="Color.Primary">@titleText</MudText>
+        <MudText Typo="Typo.subtitle1" Align="Align.Center" Color="Color.Primary">@subtitleText</MudText>
     </MudContainer>
 </MudContainer>
 
@@ -16,10 +18,10 @@
     <MudContainer class="centered">
         <MudContainer class="auth-form-root">
             <MudText Typo="Typo.h2" Align="Align.Left">Sign in</MudText>
-            <MudForm @bind-IsValid="@success">
-                <MudTextField @bind-Value="@Username" Label="Username" Variant="Variant.Outlined" Required RequiredError="User name is required!"></MudTextField>
-                <MudTextField @bind-Value="@Password" Label="Password" InputType="InputType.Password" Required RequiredError="Password is required!" Variant="Variant.Outlined"></MudTextField>
-                <MudButton @onclick="HandleLogin" Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" Style="margin-top: 6px;" Disabled="@(!success)">Sign in now</MudButton>
+            <MudForm>
+                <MudTextField @bind-Value="@usernameEmail" Label="Username/Email" Variant="Variant.Outlined" ></MudTextField>
+                <MudTextField @bind-Value="@password" Label="Password" InputType="InputType.Password" Variant="Variant.Outlined"></MudTextField>
+                <MudButton @onclick="HandleLogin" Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" Style="margin-top: 6px;">Sign in now</MudButton>
             </MudForm>
             <MudNavLink Href="/signup">Don't have an accout? Sign up</MudNavLink>
         </MudContainer>
@@ -66,16 +68,32 @@
 </style>
 
 @code {
-    public string? Password {get;set;}
-    public string? Username {get;set;}
-    bool success;
+    public string? password {get;set;}
+    public string? usernameEmail {get;set;}
+
+    public string titleText = "Customized site that automaticly summs all of your monthly income and costs and displays them in comfortable dashboard";
+    public string subtitleText = "Sign in now to get the full access";
 
     private async void HandleLogin() 
     {
-        await LocalStorage.SetItemAsync<string>("username", Username!);
-        await AuthStateProvider.GetAuthenticationStateAsync();
+        var users = await Http.GetFromJsonAsync<List<User>>($"{Navigator.BaseUri}api/user");
+        var user = users!.Where(usr => (usr.Username == usernameEmail || usr.Email == usernameEmail)  && usr.Password == password).FirstOrDefault();
 
-        Navigator.NavigateTo("");
+        if (user != null)
+        {
+            await LocalStorage.SetItemAsync<string>("username", user.Username!);
+            await LocalStorage.SetItemAsync<AuthLevelEnum>("authLevel", user.AuthLevel);
+            await AuthStateProvider.GetAuthenticationStateAsync();
+
+            Navigator.NavigateTo("");
+        }
+        else 
+        {
+            titleText = "Invalid Username/Email and Password combination";
+            StateHasChanged();
+        }
+
+        
     }
 
 }
