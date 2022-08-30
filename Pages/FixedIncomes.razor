@@ -9,13 +9,24 @@
 
 <AuthorizeView>
         <Authorized>
-            <MudContainer MaxWidth="MaxWidth.Large">
-                <MudText Typo="Typo.h2" Align="Align.Center" GutterBottom="true">Update your fixed income:</MudText>
+            @{
+                if (dataLoaded == false){
+                    RefreshMe();
+                    dataLoaded = true;
+                }
+            }
 
-                <FixedForm Controller="fixedincome"/>
+            @if (fixedIncomes is not null)
+            {
+                <MudContainer MaxWidth="MaxWidth.Large">
+                    <MudText Typo="Typo.h2" Align="Align.Center" GutterBottom="true">Update your fixed income:</MudText>
 
-                <FixedDataGrid Data="@fixedIncomes"/>
-            </MudContainer>
+                    <FixedForm Controller="fixedincome"/>
+
+                    <FixedDataGrid Data="@fixedIncomes"/>
+                </MudContainer>
+            }
+            
         </Authorized>
 
 
@@ -50,12 +61,11 @@
 
 @code {
     private List<FixedIncome>? fixedIncomes = new List<FixedIncome>();
+    private bool dataLoaded = false;
 
-    protected async override Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         ReloadOtherComponent.RefreshRequested += RefreshMe;
-        fixedIncomes = await Http.GetFromJsonAsync<List<FixedIncome>>($"{Navigator.BaseUri}api/fixedincome");
-        StateHasChanged();
     }
 
     private async void RefreshMe()

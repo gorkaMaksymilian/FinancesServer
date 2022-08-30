@@ -9,13 +9,23 @@
 
 <AuthorizeView>
         <Authorized>
-            <MudContainer MaxWidth="MaxWidth.Large">
-                <MudText Typo="Typo.h2" Align="Align.Center" GutterBottom="true">Update your expenses:</MudText>
+            @{
+                if (dataLoaded == false){
+                    RefreshMe();
+                    dataLoaded = true;
+                }
+            }
+            @if (expenses is not null)
+            {
+                <MudContainer MaxWidth="MaxWidth.Large">
+                    <MudText Typo="Typo.h2" Align="Align.Center" GutterBottom="true">Update your expenses:</MudText>
 
-                <VariableForm Controller="expense"/>
+                    <VariableForm Controller="expense"/>
 
-                <VariableDataGrid Data=@expenses/>
-            </MudContainer>
+                    <VariableDataGrid Data=@expenses/>
+                </MudContainer>
+            }
+            
         </Authorized>
 
 
@@ -49,12 +59,11 @@
 
 @code {
     private List<Expense>? expenses = new List<Expense>();
-
-    protected async override Task OnInitializedAsync()
+    private bool dataLoaded = false;
+    
+    protected override void OnInitialized()
     {
         ReloadOtherComponent.RefreshRequested += RefreshMe;
-        expenses = await Http.GetFromJsonAsync<List<Expense>>($"{Navigator.BaseUri}api/expense");
-        StateHasChanged();
     }
 
     private async void RefreshMe()
