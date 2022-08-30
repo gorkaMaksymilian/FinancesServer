@@ -16,7 +16,7 @@ namespace FinancesServer.Services
 
         Task<IEnumerable<FixedIncome>> GetFixedIncomesByUserId(int userId);
         Task<IEnumerable<FixedCost>> GetFixedCostsByUserId(int userId);
-        Task<IEnumerable<Income>> GetIncomesByUserId(int userId);
+        Task<IEnumerable<Income>> GetEarningsByUserId(int userId);
         Task<IEnumerable<Expense>> GetExpensesByUserId(int userId);
     }
 }

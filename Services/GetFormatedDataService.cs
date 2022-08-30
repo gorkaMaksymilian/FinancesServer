@@ -36,7 +36,7 @@ namespace FinancesServer.Services
             return data!.Where(fInc => fInc.UserId == userId);
         }
 
-        public async Task<IEnumerable<Income>> GetIncomesByUserId(int userId)
+        public async Task<IEnumerable<Income>> GetEarningsByUserId(int userId)
         {
             List<Income>? data = await _http.GetFromJsonAsync<List<Income>>($"{_host}api/income");
             return data!.Where(Inc => Inc.UserId == userId);
