@@ -7,6 +7,12 @@
 
 <AuthorizeView>
         <Authorized>
+            @{
+                if (dataLoaded == false){
+                    LoadData();
+                    dataLoaded = true;
+                }
+            }
             @if (currentMonthEarnings is not null && currentMonthExpenses is not null && lastMonthEarnings is not null && lastMonthExpenses is not null &&
                  fixedCosts is not null && fixedIncome is not null) 
             {
@@ -102,8 +108,10 @@
     string[]? currentMonthExpensesCategories;
     double[]? currentMonthExpensesAmounts;
 
+    private bool dataLoaded = false;
 
-    protected override async Task OnInitializedAsync()
+
+    protected async void LoadData()
     {
         // Get all data needed
         currentMonthEarnings = await dataService.GetMonthlyEarnings(currentDate.Month, currentDate.Year);
@@ -144,6 +152,8 @@
 
         summedFixedCosts = GetSummedAmount(fixedCosts);
         summedFixedIncome = GetSummedAmount(fixedIncome);
+
+        StateHasChanged();
     }
 
     protected decimal GetSummedAmount(IEnumerable<MonthlyItem> monthlyItems)
