@@ -12,8 +12,8 @@
 
 <MudContainer class="split left">
     <MudContainer class="centered">
-        <MudText Typo="Typo.h4" Align="Align.Center" Color="Color.Primary">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis auctor elit vitae ex pulvinar dictum.</MudText>
-        <MudText Typo="Typo.subtitle1" Align="Align.Center" Color="Color.Primary">Nunc sit amet sagittis libero.</MudText>
+        <MudText Typo="Typo.h4" Align="Align.Center" Color="Color.Primary">@titleText</MudText>
+        <MudText Typo="Typo.subtitle1" Align="Align.Center" Color="Color.Primary">@subtitleText</MudText>
     </MudContainer>
 </MudContainer>
 
@@ -82,6 +82,9 @@
     MudTextField<string>? PasswordField;
     bool success;
 
+    public string titleText = "Create new account today and get full access (no strings attached this website is completely free to use)";
+    public string subtitleText = "Your own income/costs dashboard is one step away";
+
     private IEnumerable<string> PasswordStrength(string pw)
     {
         if (string.IsNullOrWhiteSpace(pw))
@@ -110,19 +113,36 @@
 
     private async void HandleSignUp() 
     {
-        User newUser = new User() {
+        // Check if username or login is already used
+        var users = await Http.GetFromJsonAsync<List<User>>($"{Navigator.BaseUri}api/user");
+        var user = users!.Where(usr => usr.Username == username || usr.Email == email).FirstOrDefault();
+
+        if (user != null) 
+        {
+            if (user.Username == username)
+                titleText = "We are sorry but this username is already in use";
+            else
+                titleText = "We are sorry but this email is already in use";
+
+            StateHasChanged();
+        }
+        else 
+        {
+            User newUser = new User() {
             Username = username,
             Email = email,
             Password = PasswordField!.Value,
             AuthLevel = AuthLevelEnum.User
-        };
+            };
 
-        await LocalStorage.SetItemAsync<string>("username", username!);
-        await LocalStorage.SetItemAsync<AuthLevelEnum>("authLevel", newUser.AuthLevel);
-        await AuthStateProvider.GetAuthenticationStateAsync();
+            await LocalStorage.SetItemAsync<string>("username", username!);
+            await LocalStorage.SetItemAsync<AuthLevelEnum>("authLevel", newUser.AuthLevel);
+            await AuthStateProvider.GetAuthenticationStateAsync();
 
-        await Http.PostAsJsonAsync<User>($"{Navigator.BaseUri}api/user", newUser);
+            await Http.PostAsJsonAsync<User>($"{Navigator.BaseUri}api/user", newUser);
 
-        Navigator.NavigateTo("");
+            Navigator.NavigateTo("");
+        }
+        
     }
 }
