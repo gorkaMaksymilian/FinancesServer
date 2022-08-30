@@ -17,5 +17,8 @@ namespace FinancesServer.DTOs.Earnings
 
         [Required]
         public IncomeCategoryEnum Category {get; set;}
+
+        [Required]
+        public int UserId {get;set;}
     }
 }

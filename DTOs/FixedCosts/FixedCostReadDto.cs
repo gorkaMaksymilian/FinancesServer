@@ -10,5 +10,6 @@ namespace FinancesServer.DTOs.FixedCosts
         public decimal Amount {get;set;} 
         public FixedCostCategoryEnum Category { get; set; }
         public MonthEnum MonthOfFirstPayment {get;set;} 
+        public int UserId {get;set;}
     }
 }
