@@ -159,6 +159,7 @@
 
             await LocalStorage.SetItemAsync<string>("username", username!);
             await LocalStorage.SetItemAsync<AuthLevelEnum>("authLevel", newUser.AuthLevel);
+            await LocalStorage.SetItemAsync<int>("userId", newUser.Id);
             await AuthStateProvider.GetAuthenticationStateAsync();
 
             await Http.PostAsJsonAsync<User>($"{Navigator.BaseUri}api/user", newUser);

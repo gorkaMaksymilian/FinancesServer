@@ -104,6 +104,7 @@
         {
             await LocalStorage.SetItemAsync<string>("username", user.Username!);
             await LocalStorage.SetItemAsync<AuthLevelEnum>("authLevel", user.AuthLevel);
+            await LocalStorage.SetItemAsync<int>("userId", user.Id);
             await AuthStateProvider.GetAuthenticationStateAsync();
 
             Navigator.NavigateTo("");
