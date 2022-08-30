@@ -10,34 +10,56 @@
 
 <PageTitle>Sign up</PageTitle>
 
-<MudContainer class="split left">
-    <MudContainer class="centered">
-        <MudText Typo="Typo.h4" Align="Align.Center" Color="Color.Primary">@titleText</MudText>
-        <MudText Typo="Typo.subtitle1" Align="Align.Center" Color="Color.Primary">@subtitleText</MudText>
-    </MudContainer>
-</MudContainer>
+<AuthorizeView>
+        <Authorized>
+            <MudContainer class="fullscreen">
+                    <MudText Typo="Typo.h3" Align="Align.Center" Color="Color.Primary" Class="centered">You are already signed in.</MudText>
+            </MudContainer>
+        </Authorized>
 
-<MudContainer class="split right">
-    <MudContainer class="centered">
-        <MudContainer class="auth-form-root">
-            <MudText Typo="Typo.h2" Align="Align.Left">Create new account</MudText>
-            <MudForm @bind-IsValid="@success">
-                <MudTextField @bind-Value="@username" Label="Username"  Variant="Variant.Outlined" Required="true" RequiredError="User name is required!"/>
-                <MudTextField @bind-Value="@email" Label="Email adress" Variant="Variant.Outlined" Required RequiredError="The email address is invalid"
-                            Validation="@(new EmailAddressAttribute() {ErrorMessage = "The email address is invalid"})"/>
-                <MudTextField @ref="PasswordField" T="string" Label="Password" Variant="Variant.Outlined" InputType="InputType.Password" Required RequiredError="Password is required!" 
-                            Validation="@(new Func<string, IEnumerable<string>>(PasswordStrength))" HelperText="Choose a strong password"/>
-                <MudTextField T="string" Label="Repeat password" Variant="Variant.Outlined" InputType="InputType.Password" 
-                              Validation="@(new Func<string, string?>(PasswordMatch))" HelperText="Repeat the password"/>
 
-                <MudButton @onclick="HandleSignUp" Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" Style="margin-top: 6px;" Disabled="@(!success)">Sign up now</MudButton>
-            </MudForm>
-            <MudNavLink Href="/signin">Have an account? Sign in</MudNavLink>
-        </MudContainer>
-    </MudContainer>
-</MudContainer>
+        <NotAuthorized>
+            <MudContainer class="split left">
+                <MudContainer class="centered">
+                    <MudText Typo="Typo.h4" Align="Align.Center" Color="Color.Primary">@titleText</MudText>
+                    <MudText Typo="Typo.subtitle1" Align="Align.Center" Color="Color.Primary">@subtitleText</MudText>
+                </MudContainer>
+            </MudContainer>
+
+            <MudContainer class="split right">
+                <MudContainer class="centered">
+                    <MudContainer class="auth-form-root">
+                        <MudText Typo="Typo.h2" Align="Align.Left">Create new account</MudText>
+                        <MudForm @bind-IsValid="@success">
+                            <MudTextField @bind-Value="@username" Label="Username"  Variant="Variant.Outlined" Required="true" RequiredError="User name is required!"/>
+                            <MudTextField @bind-Value="@email" Label="Email adress" Variant="Variant.Outlined" Required RequiredError="The email address is invalid"
+                                        Validation="@(new EmailAddressAttribute() {ErrorMessage = "The email address is invalid"})"/>
+                            <MudTextField @ref="PasswordField" T="string" Label="Password" Variant="Variant.Outlined" InputType="InputType.Password" Required RequiredError="Password is required!" 
+                                        Validation="@(new Func<string, IEnumerable<string>>(PasswordStrength))" HelperText="Choose a strong password"/>
+                            <MudTextField T="string" Label="Repeat password" Variant="Variant.Outlined" InputType="InputType.Password" 
+                                        Validation="@(new Func<string, string?>(PasswordMatch))" HelperText="Repeat the password"/>
+
+                            <MudButton @onclick="HandleSignUp" Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" Style="margin-top: 6px;" Disabled="@(!success)">Sign up now</MudButton>
+                        </MudForm>
+                        <MudNavLink Href="/signin">Have an account? Sign in</MudNavLink>
+                    </MudContainer>
+                </MudContainer>
+            </MudContainer>
+        </NotAuthorized>
+</AuthorizeView>
+
+
 
 <style>
+    .fullscreen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        overflow: auto;
+    }
+
     .split {
         height: 100%;
         width: 50%;
