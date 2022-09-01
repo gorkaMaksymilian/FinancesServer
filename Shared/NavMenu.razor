@@ -6,6 +6,10 @@
 <MudNavMenu>
     <MudNavLink Href="/" Match="NavLinkMatch.All" Icon="@Icons.Filled.Store">Main Page</MudNavLink>
     <MudDivider Class="my-2"/>
+    <AuthorizeView Roles="1">
+        <MudNavLink Icon="@Icons.Filled.AdminPanelSettings" Href="/admin">Admin panel</MudNavLink>
+        <MudDivider Class="my-2"/>
+    </AuthorizeView>
     <AuthorizeView>
         <NotAuthorized>
             <MudNavLink Icon="@Icons.Filled.Login" Href="/signin">Sign in</MudNavLink>
@@ -21,6 +25,7 @@
             <MudNavLink Icon="@Icons.Filled.Logout" OnClick="Logout">Logout</MudNavLink>
         </Authorized>
     </AuthorizeView>
+    
 </MudNavMenu>
 
 @code {
