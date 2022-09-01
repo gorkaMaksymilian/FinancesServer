@@ -18,6 +18,7 @@ namespace FinancesServer.Services
             // Not authenticated (empty claims)
             var state = new AuthenticationState(new ClaimsPrincipal());
             string username = "";
+            string role = "";
 
             // Catching and ignoring InvalidOperationException
             // Exception is raised cause in pre-rendering phase we can not preform JavaScript interop calls (like getting data forom _localStorage)
@@ -26,12 +27,18 @@ namespace FinancesServer.Services
                 username = await _localStorage.GetItemAsStringAsync("username");
             }
             catch {}
+
+            try {
+                role = await _localStorage.GetItemAsStringAsync("authLevel");
+            }
+            catch {}
             
-            if (!string.IsNullOrEmpty(username))
+            if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(role))
             {
                 var identity = new ClaimsIdentity(new[]
                 {
-                    new Claim(ClaimTypes.Name, username)
+                    new Claim(ClaimTypes.Name, username),
+                    new Claim(ClaimTypes.Role, role)
                 },  "Test auth");
 
                 state = new AuthenticationState(new ClaimsPrincipal(identity));
