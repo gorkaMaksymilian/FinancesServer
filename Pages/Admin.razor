@@ -1,0 +1,19 @@
+@page "/admin"
+@using FinancesServer.Components.Admin
+
+
+<PageTitle>Admin panel</PageTitle>
+
+<AuthorizeView Roles="1">
+    <Authorized>
+        <UsersDataGrid/>
+    </Authorized>
+
+
+    <NotAuthorized>
+        <MudContainer class="fullscreen">
+            <MudText Typo="Typo.h3" Align="Align.Center" Color="Color.Primary" Class="centered">You need admin privileges to use this site.</MudText>
+        </MudContainer>
+    </NotAuthorized>
+</AuthorizeView>
+

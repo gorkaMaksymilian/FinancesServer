@@ -1,0 +1,69 @@
+@using Components.Shared
+@using Models.Shared
+@inject IDialogService DialogService
+@inject HttpClient Http
+@inject NavigationManager Navigator
+@inject IReloadOtherComponentService ReloadOtherComponent
+
+@{
+    if (dataLoaded == false){
+        LoadUsers();
+        dataLoaded = true;
+}}
+<MudDataGrid Items="@users" Hover="@true" Dense="@true" Striped="@true" ReadOnly="@false" EditMode="DataGridEditMode.Form" EditTrigger="DataGridEditTrigger.Manual"
+                          style="margin-top: 40px;"  T="User" CommittedItemChanges="@CommittedItemChanges">
+    <Columns>
+        <Column T="User" Field="Id" />
+        <Column T="User" Field="Username" />
+        <Column T="User" Field="Email" />
+        <Column T="User" Field="Password" />
+        <Column T="User" Field="AuthLevel" Title="Privileges" />
+
+        <Column T="User" CellClass="d-flex justify-end" Sortable="@false">
+            <CellTemplate>
+                <MudIconButton Context="context" Size="@Size.Small" Icon="@Icons.Outlined.Edit" OnClick="@context.Actions.StartEditingItem" />
+                <MudIconButton Size="@Size.Small" Icon="@Icons.Filled.Delete" OnClick="@(() => DeleteRow(context.Item))"/>           
+            </CellTemplate>
+        </Column>
+    </Columns>
+                
+</MudDataGrid>
+
+@code {
+    private IEnumerable<User> users = new List<User>();
+    private bool dataLoaded = false;
+
+    public async void LoadUsers()
+    {
+        var data = await Http.GetFromJsonAsync<List<User>>($"{Navigator.BaseUri}api/user");
+        if (data is not null)
+            users = data;
+        StateHasChanged();
+    }
+
+
+    public async void CommittedItemChanges(User usr)
+    {
+        await Http.PutAsJsonAsync<User>($"{Navigator.BaseUri}api/user/{usr.Id}", usr);
+        StateHasChanged();
+    }
+
+    protected override void OnInitialized()
+    {
+        ReloadOtherComponent.RefreshRequested += LoadUsers;
+    }
+
+    public void DeleteRow(User usr)
+    {
+        var parameters = new DialogParameters();
+        parameters.Add("ContentText", "Do you really want to delete this record? This process cannot be undone.");
+        parameters.Add("Id", usr.Id);
+        parameters.Add("Controller", "user");
+
+
+        var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraSmall };
+
+        DialogService.Show<DeleteDialog>("Delete", parameters, options);
+        
+    }
+}
