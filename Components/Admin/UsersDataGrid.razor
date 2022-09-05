@@ -11,9 +11,9 @@
         dataLoaded = true;
 }}
 <MudDataGrid Items="@users" Hover="@true" Dense="@true" Striped="@true" ReadOnly="@false" EditMode="DataGridEditMode.Form" EditTrigger="DataGridEditTrigger.Manual"
-                          style="margin-top: 40px;"  T="User" CommittedItemChanges="@CommittedItemChanges">
+                          style="margin-top: 40px;" T="User" CommittedItemChanges="@CommittedItemChanges">
     <Columns>
-        <Column T="User" Field="Id" />
+        <Column T="User" Field="Id" IsEditable="false"/>
         <Column T="User" Field="Username" />
         <Column T="User" Field="Email" />
         <Column T="User" Field="Password" />
